@@ -95,7 +95,7 @@ credentials:
               scope: SYSTEM
               id: ssh_with_passphrase_provided_via_file
               username: ssh_root
-              description: "SSH passphrase with private key file. Private key provided"
+              description: "SSH passphrase with private key file."
               privateKeySource:
                 directEntry:
                   privateKey: "${readFile:${SSH_AGENT_PRIVATE_KEY}}"
