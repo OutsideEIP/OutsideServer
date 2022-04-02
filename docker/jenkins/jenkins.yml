@@ -32,6 +32,7 @@ jenkins:
               failIfWorkDirIsMissing: false
               internalDir: "remoting"
               workDirPath: "/var/tmp"
+  numExecutors: 0
 
   slaveAgentPort: 50000
   agentProtocols:
