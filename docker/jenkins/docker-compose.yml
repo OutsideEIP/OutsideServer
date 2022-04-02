@@ -1,0 +1,18 @@
+version: "3"
+services:
+  jenkins:
+    build: .
+    image: jenkins/jenkins:lts
+    container_name: outside_jenkins
+    privileged: true
+    user: root
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - SSH_AGENT_KEY_PASSWORD=${SSH_AGENT_KEY_PASSWORD}
+      - SSH_AGENT_PRIVATE_KEY=${SSH_AGENT_PRIVATE_KEY}
+      - JENKINS_HOST=${JENKINS_HOST}
+    restart: always

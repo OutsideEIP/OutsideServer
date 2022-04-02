@@ -1,0 +1,100 @@
+jenkins:
+  systemMessage: "Outside Jenkins"
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+          - name: "admin"
+            description: "administrator"
+            permissions:
+              - "Overall/Administer"
+            assignments:
+              - "admin"
+          - name: "dev"
+            description: "developer"
+            permissions:
+              - "Overall/Read"
+              - "Job/Build"
+              - "Job/Read"
+              - "Job/Workspace"
+            assignments:
+              - "developer"
+  noUsageStatistics: true
+  nodes:
+    - permanent:
+        name: "static-agent"
+        remoteFS: "/var/jenkins_home"
+        numExecutors: 0
+        launcher:
+          jnlp:
+            workDirSettings:
+              disabled: true
+              failIfWorkDirIsMissing: false
+              internalDir: "remoting"
+              workDirPath: "/var/tmp"
+
+  slaveAgentPort: 50000
+  agentProtocols:
+    - "jnlp2"
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          name: "administrator"
+          password: "outside"
+        - id: "developer"
+          name: "dev"
+          password: "outside"
+
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+  queueItemAuthenticator:
+    authenticators:
+      - global:
+          strategy: "anonymousAuthorizationStrategy"
+
+unclassified:
+  location:
+    url: "${JENKINS_HOST}"
+
+tool:
+  git:
+    installations:
+      - name: git
+        home: /var/jenkins_home/plugins/git
+  gradle:
+    installations:
+      - name: "gradle"
+        properties:
+          - installSource:
+              installers:
+                - gradleInstaller:
+                    id: "7.4.1"
+                - gradleInstaller:
+                    id: "7.4.1"
+  jdk:
+    installations:
+      - home: "/usr/lib/jvm/jdk-17/java"
+        name: "jdk 17"
+      - properties:
+          - installSource:
+              installers:
+                - jdkInstaller:
+                    acceptLicense: false
+                    id: "jdk-9.0.4-oth-JPR"
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - basicSSHUserPrivateKey:
+              scope: SYSTEM
+              id: ssh_with_passphrase_provided_via_file
+              username: ssh_root
+              description: "SSH passphrase with private key file. Private key provided"
+              privateKeySource:
+                directEntry:
+                  privateKey: "${readFile:${SSH_AGENT_PRIVATE_KEY}}"
