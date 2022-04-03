@@ -20,7 +20,7 @@ jenkins:
               - "Agent/Build"
             assignments:
               - "developer"
-  noUsageStatistics: tru
+  noUsageStatistics: true
   numExecutors: 1
 
   remotingSecurity:
@@ -60,3 +60,6 @@ credentials:
               privateKeySource:
                 directEntry:
                   privateKey: "${readFile:${SSH_AGENT_PRIVATE_KEY_FILE}}"
+
+jobs:
+  - file: /usr/local/jobs.groovy
