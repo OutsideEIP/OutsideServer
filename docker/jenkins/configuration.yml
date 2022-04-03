@@ -21,7 +21,24 @@ jenkins:
             assignments:
               - "developer"
   noUsageStatistics: true
-  numExecutors: 1
+  nodes:
+    - permanent:
+        name: "jenkins-agent1"
+        remoteFS: "/home/jenkins"
+        numExecutors: 1
+        launcher:
+          ssh:
+            host: "static-agent"
+            port: 22
+            javaPath: "/opt/java/openjdk/bin/java"
+            credentialsId: jenkins
+            launchTimeoutSeconds: 60
+            maxNumRetries: 3
+            retryWaitTime: 30
+            sshHostKeyVerificationStrategy:
+              manuallyTrustedKeyVerificationStrategy:
+                requireInitialManualTrust: false
+  numExecutors: 0
 
   remotingSecurity:
     enabled: true
