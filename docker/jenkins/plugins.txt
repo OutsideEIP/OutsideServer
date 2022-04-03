@@ -20,3 +20,6 @@ ssh-slaves:latest
 plain-credentials:latest
 authorize-project:latest
 jdk-tool:latest
+workflow-aggregator:latest
+docker-plugin:latest
+docker-workflow:latest

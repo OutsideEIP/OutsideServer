@@ -1,0 +1,24 @@
+FROM jenkins/jenkins@sha256:ea48cb1a1bb0acd1e947fcfc84dc97c203ed42db9c012dc932b3c9eacc190d70
+
+SHELL ["/bin/bash", "-c"]
+
+ARG JENKINS_USER_ADMIN_PASSWORD \
+    JENKINS_USER_DEVELOPER_PASSWORD \
+    JENKINS_RS_PATH \
+    JENKINS_URL
+
+
+# Jenkins configuration
+
+COPY ${JENKINS_RS_PATH}/plugins.txt /usr/local/plugins.txt
+COPY ${JENKINS_RS_PATH}/configuration.yml /usr/local/configuration.yml
+COPY ${JENKINS_RS_PATH}/jobs.groovy  /usr/local/jobs.groovy
+
+RUN /usr/local/bin/install-plugins.sh < /usr/local/plugins.txt
+
+ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
+ENV CASC_JENKINS_CONFIG /usr/local/configuration.yml
+ENV JENKINS_USER_ADMIN_PASSWORD $JENKINS_USER_ADMIN_PASSWORD
+ENV JENKINS_USER_DEVELOPER_PASSWORD $JENKINS_USER_DEVELOPER_PASSWORD
+ENV JENKINS_URL $JENKINS_URL
+# ----------

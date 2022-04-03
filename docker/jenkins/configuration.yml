@@ -1,0 +1,62 @@
+jenkins:
+  systemMessage: "Outside Jenkins"
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+          - name: "admin"
+            description: "administrator"
+            permissions:
+              - "Overall/Administer"
+            assignments:
+              - "admin"
+          - name: "dev"
+            description: "developer"
+            permissions:
+              - "Overall/Read"
+              - "Job/Build"
+              - "Job/Read"
+              - "Job/Workspace"
+              - "Agent/Build"
+            assignments:
+              - "developer"
+  noUsageStatistics: tru
+  numExecutors: 1
+
+  remotingSecurity:
+    enabled: true
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          name: "administrator"
+          password: ${JENKINS_USER_ADMIN_PASSWORD}
+        - id: "developer"
+          name: "dev"
+          password: ${JENKINS_USER_DEVELOPER_PASSWORD}
+
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+  queueItemAuthenticator:
+    authenticators:
+      - global:
+          strategy: "TriggeringUsersAuthorizationStrategy"
+
+unclassified:
+  location:
+    url: ${JENKINS_URL}
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - basicSSHUserPrivateKey:
+              scope: GLOBAL
+              id: jenkins
+              username: jenkins
+              description: "Jenkins agent ssh private key."
+              privateKeySource:
+                directEntry:
+                  privateKey: "${readFile:${SSH_AGENT_PRIVATE_KEY_FILE}}"
