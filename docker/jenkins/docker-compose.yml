@@ -30,6 +30,7 @@ services:
       args:
         JENKINS_RS_PATH: ${JENKINS_RS_PATH}
         SSH_AGENT_PUBLIC_KEY_FILE: ${SSH_AGENT_PUBLIC_KEY_FILE}
+        HOST_DOCKER_GUID: ${HOST_DOCKER_GUID}
     ports:
       - "24:22"
     image: outside-jenkins-static-agent
