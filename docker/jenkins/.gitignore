@@ -1,2 +1,3 @@
-/agent/ssh/**
+keys/jenkins-agent-key
+keys/jenkins-agent-key.pub
 .env

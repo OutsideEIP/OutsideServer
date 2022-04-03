@@ -5,10 +5,16 @@ SHELL ["/bin/bash", "-c"]
 ARG JENKINS_USER_ADMIN_PASSWORD \
     JENKINS_USER_DEVELOPER_PASSWORD \
     JENKINS_RS_PATH \
-    JENKINS_URL
+    JENKINS_URL \
+    SSH_AGENT_PRIVATE_KEY_FILE
 
 
 # Jenkins configuration
+COPY ${JENKINS_RS_PATH}/${SSH_AGENT_PRIVATE_KEY_FILE} /etc/.ssh/jenkins-agent-key
+USER root
+RUN chown jenkins /etc/.ssh/jenkins-agent-key
+RUN chmod 600 /etc/.ssh/jenkins-agent-key
+USER jenkins
 
 COPY ${JENKINS_RS_PATH}/plugins.txt /usr/local/plugins.txt
 COPY ${JENKINS_RS_PATH}/configuration.yml /usr/local/configuration.yml
@@ -21,4 +27,5 @@ ENV CASC_JENKINS_CONFIG /usr/local/configuration.yml
 ENV JENKINS_USER_ADMIN_PASSWORD $JENKINS_USER_ADMIN_PASSWORD
 ENV JENKINS_USER_DEVELOPER_PASSWORD $JENKINS_USER_DEVELOPER_PASSWORD
 ENV JENKINS_URL $JENKINS_URL
+ENV SSH_AGENT_PRIVATE_KEY_FILE /etc/.ssh/jenkins-agent-key
 # ----------

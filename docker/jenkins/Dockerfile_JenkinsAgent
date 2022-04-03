@@ -1,9 +1,13 @@
 FROM jenkins/ssh-agent:latest
 
 
-ARG JENKINS_RS_PATH
+ARG JENKINS_RS_PATH \
+    SSH_AGENT_PUBLIC_KEY_FILE
 
 # Jenkins Agent configuration
+COPY ${JENKINS_RS_PATH}/${SSH_AGENT_PUBLIC_KEY_FILE} /etc/.ssh/jenkins-agent-key.pub
+
+RUN echo "export JENKINS_AGENT_SSH_PUBKEY='`cat /etc/.ssh/jenkins-agent-key.pub`'" >> /entrypoint.sh && echo "exec setup-sshd" >> /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT [ "bash", "-c", "/entrypoint.sh" ]
 # ----------

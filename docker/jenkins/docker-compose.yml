@@ -11,6 +11,7 @@ services:
         JENKINS_USER_DEVELOPER_PASSWORD: ${JENKINS_USER_DEVELOPER_PASSWORD}
         JENKINS_RS_PATH: ${JENKINS_RS_PATH}
         JENKINS_URL: ${JENKINS_URL}
+        SSH_AGENT_PRIVATE_KEY_FILE: ${SSH_AGENT_PRIVATE_KEY_FILE}
     ports:
       - "8080:8080"
       - "50000:50000"
@@ -28,6 +29,7 @@ services:
       dockerfile: ./Dockerfile_JenkinsAgent
       args:
         JENKINS_RS_PATH: ${JENKINS_RS_PATH}
+        SSH_AGENT_PUBLIC_KEY_FILE: ${SSH_AGENT_PUBLIC_KEY_FILE}
     ports:
       - "24:22"
     image: outside-jenkins-static-agent
