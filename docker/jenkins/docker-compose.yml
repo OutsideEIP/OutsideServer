@@ -14,7 +14,6 @@ services:
         SSH_AGENT_PRIVATE_KEY_FILE: ${SSH_AGENT_PRIVATE_KEY_FILE}
     ports:
       - "8080:8080"
-      - "50000:50000"
     image: outside-jenkins
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'

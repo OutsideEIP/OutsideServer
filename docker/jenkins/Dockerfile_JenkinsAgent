@@ -2,11 +2,15 @@ FROM jenkins/ssh-agent:latest
 
 
 ARG JENKINS_RS_PATH \
-    SSH_AGENT_PUBLIC_KEY_FILE
+    SSH_AGENT_PUBLIC_KEY_FILE \
+    HOST_DOCKER_GUID
 
 
 # Installing docker client and assigning execution rights to jenkins
 USER root
+
+RUN groupadd -g ${HOST_DOCKER_GUID} docker
+RUN usermod -aG docker jenkins
 
 RUN apt-get update -qq && apt-get install -qqy ca-certificates curl gnupg lsb-release
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
