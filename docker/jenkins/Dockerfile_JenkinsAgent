@@ -1,0 +1,9 @@
+FROM jenkins/ssh-agent:latest
+
+
+ARG JENKINS_RS_PATH
+
+# Jenkins Agent configuration
+
+ENTRYPOINT [ "bash", "-c", "/entrypoint.sh" ]
+# ----------

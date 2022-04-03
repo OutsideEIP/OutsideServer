@@ -1,18 +1,38 @@
 version: "3"
 services:
+
   jenkins:
-    build: .
-    image: jenkins/jenkins:lts
-    container_name: outside_jenkins
-    privileged: true
-    user: root
+    container_name: jenkins-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile_Jenkins
+      args:
+        JENKINS_USER_ADMIN_PASSWORD: ${JENKINS_USER_ADMIN_PASSWORD}
+        JENKINS_USER_DEVELOPER_PASSWORD: ${JENKINS_USER_DEVELOPER_PASSWORD}
+        JENKINS_RS_PATH: ${JENKINS_RS_PATH}
+        JENKINS_URL: ${JENKINS_URL}
     ports:
-      - "8083:8080"
+      - "8080:8080"
       - "50000:50000"
+    image: outside-jenkins
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - SSH_AGENT_KEY_PASSWORD=${SSH_AGENT_KEY_PASSWORD}
-      - SSH_AGENT_PRIVATE_KEY=${SSH_AGENT_PRIVATE_KEY}
-      - JENKINS_HOST=${JENKINS_HOST}
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    extra_hosts:
+      - "localhost:host-gateway"
+    restart: always
+
+  static-agent:
+    container_name: static-agent-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile_JenkinsAgent
+      args:
+        JENKINS_RS_PATH: ${JENKINS_RS_PATH}
+    ports:
+      - "24:22"
+    image: outside-jenkins-static-agent
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    extra_hosts:
+      - "localhost:host-gateway"
     restart: always
