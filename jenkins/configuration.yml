@@ -39,7 +39,6 @@ jenkins:
               manuallyTrustedKeyVerificationStrategy:
                 requireInitialManualTrust: false
   numExecutors: 0
-
   remotingSecurity:
     enabled: true
   securityRealm:

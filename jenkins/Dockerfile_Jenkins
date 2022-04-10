@@ -16,9 +16,10 @@ RUN chown jenkins /etc/.ssh/jenkins-agent-key
 RUN chmod 600 /etc/.ssh/jenkins-agent-key
 USER jenkins
 
-COPY ${JENKINS_RS_PATH}/plugins.txt /usr/local/plugins.txt
-COPY ${JENKINS_RS_PATH}/configuration.yml /usr/local/configuration.yml
-COPY ${JENKINS_RS_PATH}/jobs.groovy  /usr/local/jobs.groovy
+COPY ${JENKINS_RESOURCES_PATH}/plugins.txt /usr/local/plugins.txt
+COPY ${JENKINS_RESOURCES_PATH}/configuration.yml /usr/local/configuration.yml
+COPY ${JENKINS_RESOURCES_PATH}/jobs.groovy  /usr/local/jobs.groovy
+COPY ${JENKINS_RESOURCES_PATH}/Jenkinsfile  /usr/local/Jenkinsfile
 
 RUN /usr/local/bin/install-plugins.sh < /usr/local/plugins.txt
 
