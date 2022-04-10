@@ -28,3 +28,14 @@ job('Test Docker') {
         shell('docker --version')
     }
 }
+
+pipelineJob('OutsideServer') {
+    definition {
+        cpsScm {
+            scm {
+                git (branch: 'master', credentialsId: 'jenkins', url: ${JENKINS_SERVER_REPOSITORY_URL})
+            }
+            scriptPath('./jenkins/Jenkinsfile')
+        }
+    }
+}
