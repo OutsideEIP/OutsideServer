@@ -4,13 +4,13 @@ SHELL ["/bin/bash", "-c"]
 
 ARG JENKINS_USER_ADMIN_PASSWORD \
     JENKINS_USER_DEVELOPER_PASSWORD \
-    JENKINS_RS_PATH \
+    JENKINS_RESOURCES_PATH \
     JENKINS_URL \
     SSH_AGENT_PRIVATE_KEY_FILE
 
 
 # Jenkins configuration
-COPY ${JENKINS_RS_PATH}/${SSH_AGENT_PRIVATE_KEY_FILE} /etc/.ssh/jenkins-agent-key
+COPY ${SSH_AGENT_PRIVATE_KEY_FILE} /etc/.ssh/jenkins-agent-key
 USER root
 RUN chown jenkins /etc/.ssh/jenkins-agent-key
 RUN chmod 600 /etc/.ssh/jenkins-agent-key
