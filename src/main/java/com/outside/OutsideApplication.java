@@ -13,8 +13,7 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 @RestController
 @Import({
-        AuthLogin.class,
-        AuthRegister.class
+        Auth.class
 })
 public class OutsideApplication {
 
