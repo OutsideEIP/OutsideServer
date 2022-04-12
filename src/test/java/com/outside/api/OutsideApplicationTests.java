@@ -28,15 +28,15 @@ public class OutsideApplicationTests {
 	}
 
 	@Test
-	public void getLogin() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/auth/login").accept(MediaType.APPLICATION_JSON))
+	public void postLogin() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/auth/login").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().string(equalTo("login ok")));
 	}
 
 	@Test
-	public void getRegister() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/auth/register").accept(MediaType.APPLICATION_JSON))
+	public void postRegister() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/auth/register").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().string(equalTo("register ok")));
 	}
