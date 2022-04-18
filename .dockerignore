@@ -1,0 +1,9 @@
+.git*
+.gradle
+.dockerignore
+bin
+build
+jenkins
+Dockerfile
+docker-compose.yml
+README.md

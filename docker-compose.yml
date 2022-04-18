@@ -1,0 +1,12 @@
+version: "3"
+services:
+
+  outside-server:
+    container_name: outside-server-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    image: outside-server-image
+    restart: always
