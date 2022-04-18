@@ -1,8 +1,10 @@
+.env
 .git*
 .gradle
 .dockerignore
 bin
 build
+data
 jenkins
 Dockerfile
 docker-compose.yml
