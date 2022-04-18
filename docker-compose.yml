@@ -12,7 +12,23 @@ services:
     restart: always
     depends_on:
       - database
-  
+
+  pgadmin:
+    container_name: pgadmin-container
+    ports:
+      - 8888:8888
+    image: dpage/pgadmin4
+    extra_hosts:
+      - "localhost:host-gateway"
+    environment:
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_LISTEN_PORT: 8888
+    volumes:
+      - ./data/pgadmin-container-data:/var/lib/pgadmin:rw  # `sudo chown -R 5050:5050 data/pgadmin-container-data/` to save session
+    depends_on:
+      - database
+
   database:
     container_name: outside-database-container
     ports:
