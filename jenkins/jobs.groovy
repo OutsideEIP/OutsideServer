@@ -33,7 +33,13 @@ pipelineJob('OutsideServer') {
     definition {
         cpsScm {
             scm {
-                git (branch: 'master', credentialsId: 'jenkins', url: ${JENKINS_SERVER_REPOSITORY_URL})
+                git {
+                    branch('develop')
+                    remote {
+                        credentials('jenkins')
+                        url('https://github.com/OutsideEIP/OutsideServer.git')
+                    }
+                }
             }
             scriptPath('./jenkins/Jenkinsfile')
         }
