@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'docker build -f ./Dockerfile .'
+            }
+        }
+        stage('Unit Test') {
+            steps {
+               sh 'docker build -f ./Dockerfile .'
+               sh 'env'
+            }
+        }
+    }
+    post {
+        always {
+            emailext (
+                to: '$DEFAULT_RECIPIENTS',
+                subject: '$DEFAULT_SUBJECT',
+                body: '$DEFAULT_CONTENT'
+            )
+        }
+    }
+}
