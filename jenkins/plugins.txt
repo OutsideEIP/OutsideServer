@@ -23,3 +23,4 @@ jdk-tool:1.5
 workflow-aggregator:2.7
 docker-plugin:1.2.8
 docker-workflow:1.28
+discord-notifier:206.vee9f4569ee63

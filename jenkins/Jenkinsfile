@@ -20,6 +20,15 @@ pipeline {
                 subject: '$DEFAULT_SUBJECT',
                 body: '$DEFAULT_CONTENT'
             )
+
+            discordSend (
+                webhookURL: "${DISCORD_WEBHOOK_URL}",
+                title: "${JOB_NAME} #${BUILD_NUMBER}",
+                description: "Build: ${BUILD_NUMBER}\nStatus: ${currentBuild.currentResult.toLowerCase()}",
+                footer: "Build Duration: ${currentBuild.durationString}",
+                result: currentBuild.currentResult,
+                link: BUILD_URL,
+            )
         }
     }
 }

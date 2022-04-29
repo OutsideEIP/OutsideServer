@@ -28,6 +28,8 @@ jenkins:
             value: ${JENKINS_SERVER_REPOSITORY_URL}
           - key: "JENKINS_SERVER_REPOSITORY_BRANCH"
             value: ${JENKINS_SERVER_REPOSITORY_BRANCH}
+          - key: "DISCORD_WEBHOOK_URL"
+            value: ${DISCORD_WEBHOOK_URL}
   nodes:
     - permanent:
         name: "jenkins-agent1"
