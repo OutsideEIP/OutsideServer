@@ -39,7 +39,7 @@ $ git flow feature start <[DoDs number]>-<feature name>
 $ git flow feature start 1.0.1-jenkins
 ```
 
-![](assets/git-flow-how-to-create-a-new-branch.mp4)
+https://user-images.githubusercontent.com/62943574/166144839-f615f491-b5bc-4751-83b0-cb4dc4c08ace.mp4
 
 
 ## Pull request
@@ -53,7 +53,7 @@ Not necessary:
 
 - Add reviewer(s)
 
-![](assets/github-how-to-create-a-pull-request.mp4)
+https://user-images.githubusercontent.com/62943574/166144857-8db92fc7-8f52-4679-9918-beef614f34a4.mp4
 
 ## Issues
 
@@ -61,7 +61,7 @@ Not necessary:
 - Assignees : Select people in charge of this,
 - Add description : Follow the template.
 
-![](assets/github-how-to-create-an-issue.mp4)
+https://user-images.githubusercontent.com/62943574/166144846-ac0690a1-780a-4ee5-a4f8-fb9de510cf8a.mp4
 
 :warning: **The issue description have to contains the same as the PLD document.**
 
