@@ -14,8 +14,8 @@ Documentation about `Gitflow`:
 
 Two branches have been defined :
 
-- `master` : default branch, production mirror
-- `develop`: integration branch, mirror of modification
+- `master` : default branch, production mirror,
+- `develop`: integration branch, it's the preproduction, it must build at 100% without any problem.
 
 Other types of branch are :
 
