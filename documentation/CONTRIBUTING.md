@@ -4,8 +4,13 @@
 
 This project use `Gitflow`.
 
-Read documentation about it [here](https://www.atlassian.com/fr/git/tutorials/comparing-workflows/gitflow-workflow).
-Or read the [schema](https://github.com/OutsideEIP/OutsideServer/blob/develop/documentation/assets/gitflow.jpg)
+Documentation about `Gitflow`:
+
+- [decription](https://www.atlassian.com/fr/git/tutorials/comparing-workflows/gitflow-workflow),
+- [command usage](https://danielkummer.github.io/git-flow-cheatsheet/#),
+- [schema](https://github.com/OutsideEIP/OutsideServer/blob/develop/documentation/assets/gitflow.jpg).
+
+
 
 Two branches have been defined :
 
@@ -24,32 +29,58 @@ Other types of branch are :
 Example :
 
 ```bash
-feature/jenkins
+$ git branch -b poc/jenkins
 ```
 
 Example of branch attach to a DoDs :
 
 ```bash
-feature/<[DoDs number]>-jenkins
+$ git flow feature start <[DoDs number]>-<feature name>
+$ git flow feature start 1.0.1-jenkins
 ```
 
-## Pull request - Issues
+![](assets/git-flow-how-to-create-a-new-branch.mp4)
 
-- Name : `[DoDs number] DoDs name`
-- Assignees : Select people in charge of this
-- Add description : Don't hesitate to add more than necessary
+
+## Pull request
+
+- Name : `[DoDs number] [type] : DoDs name`,
+- Assignees : Select people in charge of this,
+- Add description : Follow the template.
 - Add labels
 
 Not necessary:
 
 - Add reviewer(s)
 
+![](assets/github-how-to-create-a-pull-request.mp4)
+
+## Issues
+
+- Name : `[DoDs number] [type] : DoDs name`,
+- Assignees : Select people in charge of this,
+- Add description : Follow the template.
+
+![](assets/github-how-to-create-an-issue.mp4)
+
+:warning: **The issue description have to contains the same as the PLD document.**
+
 ## How to write a commit :
 
 A modification of file have to be associated to a message that respect the format below :
 
+If you are IN a branch:
+
 ```bash
-<issue(s) number(s)> <type> : <description>
+<type> : <description>
+
+[optional body]
+```
+
+If you are NOT in a branch:
+
+```bash
+<issue(s) number> <type> : <description>
 
 [optional body]
 ```
@@ -66,8 +97,12 @@ The `type` can be like :
 - `style` : changes that don't change the meaning of the code (formatting, spaces, semicolon, dot, ...)
 - `test` : addition of tests or correction of existing test
 
-Example :
+Examples :
 
 ```bash
-#1 #2 feature : jenkins cd pipeline job
+#4 docs : update CONTRIBUTING.md : add example, usage
+```
+
+```bash
+feature : jenkins setup
 ```
