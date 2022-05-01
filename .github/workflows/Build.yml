@@ -26,7 +26,7 @@ jobs:
         with:
           time: '10s'
       - name: Ping backend
-        run: docker exec outside-server-container wget -q -O - http://localhost:8080/ping
+        run: docker exec outside-server-container wget -q -O - http://localhost:8080/ping | grep pong
 
   BuildFull:
     runs-on: ubuntu-latest
@@ -41,6 +41,6 @@ jobs:
         with:
           time: '10s'
       - name: Ping backend
-        run: docker exec outside-server-container wget -q -O - http://localhost:8080/ping
+        run: docker exec outside-server-container wget -q -O - http://localhost:8080/ping | grep pong
       - name: Ping database
         run: docker exec outside-database-container psql -U postgres -c \\l
