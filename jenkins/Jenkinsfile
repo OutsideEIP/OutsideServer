@@ -1,15 +1,29 @@
 pipeline {
     agent any
+
+    environment {
+		DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+	}
+
     stages {
         stage('Build') {
             steps {
-                sh 'docker build -f ./Dockerfile .'
+                sh 'docker build -t ${DOCKERHUB_SERVER_IMAGE_NAME}:${BUILD_NUMBER} -f ./Dockerfile .'
             }
         }
         stage('Unit Test') {
             steps {
                sh 'docker build -f ./Dockerfile .'
-               sh 'env'
+            }
+        }
+        stage('Docker Login') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+        stage('Docker Push') {
+            steps {
+                sh 'docker push ${DOCKERHUB_SERVER_IMAGE_NAME}:${BUILD_NUMBER}'
             }
         }
     }
@@ -29,6 +43,8 @@ pipeline {
                 result: currentBuild.currentResult,
                 link: BUILD_URL,
             )
+
+            sh 'docker logout'
         }
     }
 }

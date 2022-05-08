@@ -30,6 +30,8 @@ jenkins:
             value: ${JENKINS_SERVER_REPOSITORY_BRANCH}
           - key: "DISCORD_WEBHOOK_URL"
             value: ${DISCORD_WEBHOOK_URL}
+          - key: "DOCKERHUB_SERVER_IMAGE_NAME"
+            value: ${DOCKERHUB_SERVER_IMAGE_NAME}
   nodes:
     - permanent:
         name: "jenkins-agent1"
@@ -78,7 +80,7 @@ unclassified:
     debugMode: false
     defaultBody: |-
       $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:
-      
+
       Check console output at $BUILD_URL to view the results.
     defaultContentType: "text/plain"
     defaultRecipients: ${EMAIL_EXT_DEFAULT_RECIPIENTS}
@@ -112,7 +114,13 @@ credentials:
               scope: GLOBAL
               id: ${SMTP_CREDENTIALS_ID}
               description: ""
-              password: ${SMTP_PASSWORD}
               username: ${SMTP_USER}
+              password: ${SMTP_PASSWORD}
+          - usernamePassword:
+              scope: GLOBAL
+              id: dockerhub
+              description: "Credentials to connect Docker hub for publishing images"
+              username: ${DOCKERHUB_USER}
+              password: ${DOCKERHUB_PASSWORD}
 jobs:
   - file: /usr/local/jobs.groovy
