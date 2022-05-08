@@ -1,0 +1,54 @@
+version: "3"
+services:
+
+  jenkins:
+    container_name: jenkins-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile_Jenkins
+      args:
+        JENKINS_USER_ADMIN_PASSWORD: ${JENKINS_USER_ADMIN_PASSWORD}
+        JENKINS_USER_DEVELOPER_PASSWORD: ${JENKINS_USER_DEVELOPER_PASSWORD}
+        JENKINS_RESOURCES_PATH: ${JENKINS_RESOURCES_PATH}
+        JENKINS_URL: ${JENKINS_URL}
+        SSH_AGENT_PRIVATE_KEY_FILE: ${SSH_AGENT_PRIVATE_KEY_FILE}
+        SMTP_CREDENTIALS_ID: ${SMTP_CREDENTIALS_ID}
+        SMTP_USER: ${SMTP_USER}
+        SMTP_PASSWORD: ${SMTP_PASSWORD}
+        SMTP_PORT: ${SMTP_PORT}
+        SMTP_HOST: ${SMTP_HOST}
+        SMTP_SSL: ${SMTP_SSL}
+        SMTP_TLS: ${SMTP_TLS}
+        EMAIL_EXT_DEFAULT_RECIPIENTS: ${EMAIL_EXT_DEFAULT_RECIPIENTS}
+        ADMIN_ADDRESS: ${ADMIN_ADDRESS}
+        JENKINS_SERVER_REPOSITORY_BRANCH: ${JENKINS_SERVER_REPOSITORY_BRANCH}
+        JENKINS_SERVER_REPOSITORY_URL: ${JENKINS_SERVER_REPOSITORY_URL}
+        DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
+        DOCKERHUB_SERVER_IMAGE_NAME: ${DOCKERHUB_SERVER_IMAGE_NAME}
+        DOCKERHUB_USER: ${DOCKERHUB_USER}
+        DOCKERHUB_PASSWORD: ${DOCKERHUB_PASSWORD}
+    ports:
+      - "8080:8080"
+    image: outside-jenkins
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    extra_hosts:
+      - "localhost:host-gateway"
+    restart: always
+
+  static-agent:
+    container_name: static-agent-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile_JenkinsAgent
+      args:
+        SSH_AGENT_PUBLIC_KEY_FILE: ${SSH_AGENT_PUBLIC_KEY_FILE}
+        HOST_DOCKER_GUID: ${HOST_DOCKER_GUID}
+    ports:
+      - "24:22"
+    image: outside-jenkins-static-agent
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    extra_hosts:
+      - "localhost:host-gateway"
+    restart: always

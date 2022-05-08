@@ -1,0 +1,46 @@
+name: Build Server Containers
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches:
+      - master
+      - develop
+
+jobs:
+
+  BuildServer:
+    runs-on: ubuntu-latest
+    container: docker
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create server container
+        run: docker build -t outside-server-image .
+      - name: Start server container
+        run: docker run -dp 8080:8080 --name outside-server-container outside-server-image
+      - name: Wait for backend to be up
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '10s'
+      - name: Ping backend
+        run: docker exec outside-server-container wget -q -O - http://localhost:8080/ping | grep pong
+
+  BuildFull:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Start compose stack
+        run:  docker-compose up -d server database
+      - name: Wait for services to be up
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '10s'
+      - name: Ping backend
+        run: docker exec outside-server-container wget -q -O - http://localhost:8080/ping | grep pong
+      - name: Ping database
+        run: docker exec outside-database-container psql -U postgres -c \\l

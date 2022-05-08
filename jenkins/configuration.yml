@@ -1,0 +1,126 @@
+jenkins:
+  systemMessage: "Outside Jenkins"
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+          - name: "admin"
+            description: "administrator"
+            permissions:
+              - "Overall/Administer"
+            assignments:
+              - "admin"
+          - name: "dev"
+            description: "developer"
+            permissions:
+              - "Overall/Read"
+              - "Job/Build"
+              - "Job/Read"
+              - "Job/Workspace"
+              - "Agent/Build"
+            assignments:
+              - "developer"
+  noUsageStatistics: true
+  globalNodeProperties:
+    - envVars:
+        env:
+          - key: "JENKINS_SERVER_REPOSITORY_URL"
+            value: ${JENKINS_SERVER_REPOSITORY_URL}
+          - key: "JENKINS_SERVER_REPOSITORY_BRANCH"
+            value: ${JENKINS_SERVER_REPOSITORY_BRANCH}
+          - key: "DISCORD_WEBHOOK_URL"
+            value: ${DISCORD_WEBHOOK_URL}
+          - key: "DOCKERHUB_SERVER_IMAGE_NAME"
+            value: ${DOCKERHUB_SERVER_IMAGE_NAME}
+  nodes:
+    - permanent:
+        name: "jenkins-agent1"
+        remoteFS: "/home/jenkins"
+        numExecutors: 1
+        launcher:
+          ssh:
+            host: "static-agent"
+            port: 22
+            javaPath: "/opt/java/openjdk/bin/java"
+            credentialsId: jenkins
+            launchTimeoutSeconds: 60
+            maxNumRetries: 3
+            retryWaitTime: 30
+            sshHostKeyVerificationStrategy:
+              manuallyTrustedKeyVerificationStrategy:
+                requireInitialManualTrust: false
+  numExecutors: 0
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          name: "administrator"
+          password: ${JENKINS_USER_ADMIN_PASSWORD}
+        - id: "developer"
+          name: "dev"
+          password: ${JENKINS_USER_DEVELOPER_PASSWORD}
+
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+  queueItemAuthenticator:
+    authenticators:
+      - global:
+          strategy: "TriggeringUsersAuthorizationStrategy"
+
+unclassified:
+  location:
+    url: ${JENKINS_URL}
+    adminAddress: ${ADMIN_ADDRESS}
+  email-ext:
+    adminRequiredForTemplateTesting: false
+    allowUnregisteredEnabled: false
+    charset: "UTF-8"
+    debugMode: false
+    defaultBody: |-
+      $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:
+
+      Check console output at $BUILD_URL to view the results.
+    defaultContentType: "text/plain"
+    defaultRecipients: ${EMAIL_EXT_DEFAULT_RECIPIENTS}
+    defaultSubject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!"
+    defaultTriggerIds:
+      - "hudson.plugins.emailext.plugins.trigger.AlwaysTrigger"
+    mailAccount:
+      credentialsId: ${SMTP_CREDENTIALS_ID}
+      smtpHost: ${SMTP_HOST}
+      smtpPort: ${SMTP_PORT}
+      useSsl: ${SMTP_SSL}
+      useTls: ${SMTP_TLS}
+    maxAttachmentSize: -1
+    maxAttachmentSizeMb: -1
+    precedenceBulk: false
+    watchingEnabled: false
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - basicSSHUserPrivateKey:
+              scope: GLOBAL
+              id: jenkins
+              username: jenkins
+              description: "Jenkins agent ssh private key."
+              privateKeySource:
+                directEntry:
+                  privateKey: "${readFile:${SSH_AGENT_PRIVATE_KEY_FILE}}"
+          - usernamePassword:
+              scope: GLOBAL
+              id: ${SMTP_CREDENTIALS_ID}
+              description: ""
+              username: ${SMTP_USER}
+              password: ${SMTP_PASSWORD}
+          - usernamePassword:
+              scope: GLOBAL
+              id: dockerhub
+              description: "Credentials to connect Docker hub for publishing images"
+              username: ${DOCKERHUB_USER}
+              password: ${DOCKERHUB_PASSWORD}
+jobs:
+  - file: /usr/local/jobs.groovy
