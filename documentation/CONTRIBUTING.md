@@ -61,7 +61,7 @@ https://user-images.githubusercontent.com/62943574/166144857-8db92fc7-8f52-4679-
 - Assignees : Select people in charge of this,
 - Add description : Follow the template.
 
-https://user-images.githubusercontent.com/62943574/166144846-ac0690a1-780a-4ee5-a4f8-fb9de510cf8a.mp4
+https://user-images.githubusercontent.com/62943574/168418598-a3bea098-5eb0-46bf-9bb8-8a70379002ed.mp4
 
 :warning: **The issue description have to contains the same as the PLD document.**
 
@@ -90,7 +90,7 @@ The `type` can be like :
 - `build` : changes affecting the system build or its external dependencies
 - `ci` : changes to the configuration files or the CI script
 - `cd` : changes to the configuration files or the CD script
-- `docs` : changes about documentation
+- `doc` : changes about documentation
 - `feature` : adding functionality
 - `perf` : changes made to improve the performance
 - `refactor` : changes made that do not include features or bug fixes
