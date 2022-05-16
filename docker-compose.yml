@@ -47,7 +47,7 @@ services:
       - back-tier
 
 volumes:
-  mariadb:
+  database:
 
 networks:
   back-tier:

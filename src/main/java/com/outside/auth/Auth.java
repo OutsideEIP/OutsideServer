@@ -35,7 +35,7 @@ public class Auth {
         	Connection conn = DriverManager.getConnection(url);
             System.out.println(conn);
             System.out.println("Login ok");
-            return "login ok";
+            return "login natif in progress";
         } catch (SQLException e) {
             e.printStackTrace();
             return "fail";
@@ -44,7 +44,7 @@ public class Auth {
 
 	@PostMapping("/login/google")
 	public String postGoogleLogin(@RequestParam String refreshToken) {
-		return "login ok";
+		return "login google in progress";
 	}
 
 }
