@@ -1,4 +1,4 @@
-FROM jenkins/jenkins@sha256:9405b917836c1d4a073e41a3413808fd5bdb6ac230da84fd4739424830d7c32f
+FROM jenkins/jenkins@sha256:b304326f588b40f9639f27b47775d59265c43f95c503058ca32cc7990f21cebe
 
 SHELL ["/bin/bash", "-c"]
 
