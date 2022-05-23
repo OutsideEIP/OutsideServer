@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(scanBasePackages = "com.outside", exclude = { SecurityAutoConfiguration.class })
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 @RestController
 // @Import({
 //     Auth.class
@@ -20,6 +20,7 @@ public class OutsideApplication {
 	private static final Logger log = LogManager.getLogger(OutsideApplication.class);
 
     @GetMapping("/")
+	// @Schema(test = "oui")
 	public String index() {
 		return "Hello!";
 	}
