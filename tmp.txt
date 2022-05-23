@@ -1,0 +1,121 @@
+SHEMA:
+Users table:
+    id
+    email
+    password / refresh token 
+    account_type [natif/google/facebook/twitter]
+
+
+
+REGISTER
+* token jwt
+
+2 types de comptes
+natif
+
+API:
+    google
+    facebook
+    twitter
+
+    --> token
+
+
+
+
+
+
+REGISTER:
+------------------------------------------------------------------------------
+
+POST /auth/register-natif
+    email
+    password
+    confirmPassword
+
+    -> 200 ok
+        jwt token
+    -> 400 ko
+        message
+
+
+
+POST /auth/register-google
+    refreshToken          (from sign in google then we store the access token)
+
+    -> 200 ok
+        jwt token
+    -> 400 ko
+        message
+
+
+
+POST /auth/register-google
+    refreshToken        (from sign in facebook then we store the access token)
+
+    -> 200 ok
+        jwt token
+    -> 400 ko
+        message
+______________________________________________________________________________
+
+
+
+
+LOGIN:
+------------------------------------------------------------------------------
+
+POST /auth/login-google
+    refreshToken      (from sign in facebook then we refresh the access token)
+
+    -> 200 ok
+        jwt token
+    -> 400 ko
+        message
+
+
+
+POST /auth/login-facebook
+    refreshToken      (from sign in facebook then we refresh the access token)
+
+    -> 200 ok
+        jwt token
+    -> 400 ko
+        message
+
+
+
+POST /auth/login-natif
+    email
+    password
+
+    -> 200 ok
+        jwt token
+    -> 400 ko
+        message
+
+
+
+
+ARCHITECHTURE:
+------------------------------------------------------------------------------
+src/main/java/com/outside
+                    /auth
+                        /login
+                            (api / natif login . . .)
+                            GoogleLogin.java
+                            FacebookLogin.java
+                            DatabaseLogin.java
+                        /register
+                            (api / natif register . . .)
+                            FacebookRegister.java
+                            GoogleRegister.java
+                            DatabaseRegister.java
+                        Auth.java
+                            "import auth module with different prefix depend on directory"
+                    OutsideApplication.java
+                            "import auth module with prefix path /auth"
+
+Porblemes --> import routes with prefix to avoid repetition
+        https://localcoder.org/how-to-specify-prefix-for-all-controllers-in-spring-boot
+        https://github.com/spring-projects/spring-framework/issues/18455

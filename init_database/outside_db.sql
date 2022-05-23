@@ -11,6 +11,7 @@ CREATE TABLE "Users"
             primary key,
     password     varchar     not null,
     account_type varchar
+    account_type varchar
 );
 
 CREATE UNIQUE INDEX users_email_uindex

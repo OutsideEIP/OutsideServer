@@ -17,18 +17,8 @@ import java.sql.Statement;
 @RestController
 public class Auth {
 
-	@PostMapping("/register")
-	public String postRegister() {
-		return "register ok";
-	}
-
-	@PostMapping("/login")
-	public String postLogin() {
-		return "login ok";
-	}
-
 	@PostMapping("/login/natif")
-	public String postNatifLogin(@RequestParam String email, @RequestParam String password) {
+	public String postNatifLogin(@RequestParam String email, @RequestParam String password, @RequestParam String accountType) {
 
         String url = "jdbc:postgresql://localhost:5432/outside?user=postgres&password=password";
         try {
@@ -45,6 +35,16 @@ public class Auth {
 	@PostMapping("/login/google")
 	public String postGoogleLogin(@RequestParam String refreshToken) {
 		return "login google in progress";
+	}
+
+	@PostMapping("/login/facebook")
+	public String postFacebookLogin(@RequestParam String refreshToken) {
+		return "login facebook in progress";
+	}
+
+	@PostMapping("/login/twitter")
+	public String postTwitterLogin(@RequestParam String refreshToken) {
+		return "login twitter in progress";
 	}
 
 }

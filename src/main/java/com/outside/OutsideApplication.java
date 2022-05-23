@@ -10,18 +10,18 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@SpringBootApplication(scanBasePackages = "com.outside", exclude = { SecurityAutoConfiguration.class })
 @RestController
-@Import({
-    Auth.class
-})
+// @Import({
+//     Auth.class
+// })
 public class OutsideApplication {
 
 	private static final Logger log = LogManager.getLogger(OutsideApplication.class);
 
     @GetMapping("/")
 	public String index() {
-		return "Hello World!";
+		return "Hello!";
 	}
 
 	public static void main(String[] args) {
