@@ -1,4 +1,4 @@
-package com.outside;
+package com.outside.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +16,11 @@ import java.sql.Statement;
 @RequestMapping("/auth/register")
 @RestController
 public class Register {
+
+	@GetMapping
+	public String getRegister() {
+		return "Register routes";
+	}
 
 	@PostMapping("/natif")
 	public String postNatifRegister(@RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String accountType) {

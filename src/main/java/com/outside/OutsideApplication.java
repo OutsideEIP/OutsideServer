@@ -12,9 +12,6 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 @RestController
-// @Import({
-//     Auth.class
-// })
 public class OutsideApplication {
 
 	private static final Logger log = LogManager.getLogger(OutsideApplication.class);

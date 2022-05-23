@@ -9,8 +9,7 @@ CREATE TABLE "Users"
     email        varchar(20) not null
         constraint users_pk
             primary key,
-    password     varchar     not null,
-    account_type varchar
+    token     varchar     not null,
     account_type varchar
 );
 
