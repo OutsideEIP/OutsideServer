@@ -18,6 +18,8 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @OpenAPIDefinition(info = @Info(title = "Outside swagger", version = "1.0", description = "Swagger Information"))
 @RequestMapping("/auth/register")
@@ -27,7 +29,7 @@ public class Register {
 	@Operation(
 		summary = "Get register",
 		responses = {
-			@ApiResponse(responseCode= "200", description = "description")
+			@ApiResponse(responseCode= "200", description = "description", content = @Content(schema = @Schema(example = "{\"foo\": \"bar\",\"baz\": true}")))
 		}
 	)
 	@GetMapping
