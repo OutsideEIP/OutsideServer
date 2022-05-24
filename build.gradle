@@ -24,6 +24,7 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
+	// implementation group: 'org.springdoc', name: 'springdoc-openapi-webmvc-core', version: '1.6.8'
 }
 
 tasks.named('test') {

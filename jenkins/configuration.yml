@@ -30,7 +30,7 @@ jenkins:
           ssh:
             host: "static-agent"
             port: 22
-            javaPath: "/opt/java/openjdk/bin/java"
+            javaPath: "/opt/jdk-17/bin/java"
             credentialsId: jenkins
             launchTimeoutSeconds: 60
             maxNumRetries: 3

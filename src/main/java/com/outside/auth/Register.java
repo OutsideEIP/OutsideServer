@@ -13,15 +13,35 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+@OpenAPIDefinition(info = @Info(title = "Outside swagger", version = "1.0", description = "Swagger Information"))
 @RequestMapping("/auth/register")
 @RestController
 public class Register {
 
+	@Operation(
+		summary = "Get register",
+		responses = {
+			@ApiResponse(responseCode= "200", description = "description")
+		}
+	)
 	@GetMapping
 	public String getRegister() {
 		return "Register routes";
 	}
 
+	@Operation(
+		summary = "Register with our app",
+		responses = {
+			@ApiResponse(responseCode= "200", description = "Success register"),
+			@ApiResponse(responseCode= "400", description = "Failure register"),
+		}
+	)
 	@PostMapping("/natif")
 	public String postNatifRegister(@RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String accountType) {
 
@@ -35,16 +55,37 @@ public class Register {
         }
 	}
 
+	@Operation(
+		summary = "Register with google",
+		responses = {
+			@ApiResponse(responseCode= "200", description = "Success register"),
+			@ApiResponse(responseCode= "400", description = "Failure register"),
+		}
+	)
 	@PostMapping("/google")
 	public String postGoogleRegister(@RequestParam String refreshToken) {
 		return "Register google in progress";
 	}
 
+	@Operation(
+		summary = "Register with facebook",
+		responses = {
+			@ApiResponse(responseCode= "200", description = "Success register"),
+			@ApiResponse(responseCode= "400", description = "Failure register"),
+		}
+	)
 	@PostMapping("/facebook")
 	public String postFacebookRegister(@RequestParam String refreshToken) {
 		return "Register facebook in progress";
 	}
 
+	@Operation(
+		summary = "Register with twitter",
+		responses = {
+			@ApiResponse(responseCode= "200", description = "Success register"),
+			@ApiResponse(responseCode= "400", description = "Failure register"),
+		}
+	)
 	@PostMapping("/twitter")
 	public String postTwitterRegister(@RequestParam String refreshToken) {
 		return "Register twitter in progress";

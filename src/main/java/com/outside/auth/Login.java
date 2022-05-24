@@ -19,6 +19,13 @@ import java.util.List;
 import com.outside.database.Database;
 import com.outside.database.Users;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+
 @RequestMapping("/auth/login")
 @RestController
 public class Login {
@@ -26,6 +33,13 @@ public class Login {
     @Autowired
 	Database database;
 
+	@Operation(
+		summary = "Register with our app",
+		responses = {
+			@ApiResponse(responseCode= "200", description = "Success register"),
+			@ApiResponse(responseCode= "400", description = "Failure register"),
+		}
+	)
 	@PostMapping("/natif")
 	public String postNatifLogin(@RequestParam String email, @RequestParam String password
 	) {
@@ -48,16 +62,37 @@ public class Login {
 
 	}
 
+	@Operation(
+		summary = "Login with our app",
+		responses = {
+			@ApiResponse(responseCode= "200", description = "Success register"),
+			@ApiResponse(responseCode= "400", description = "Failure register"),
+		}
+	)
 	@PostMapping("/google")
 	public String postGoogleLogin(@RequestParam String refreshToken) {
 		return "login google in progress";
 	}
 
+	@Operation(
+		summary = "Login with our app",
+		responses = {
+			@ApiResponse(responseCode= "200", description = "Success register"),
+			@ApiResponse(responseCode= "400", description = "Failure register"),
+		}
+	)
 	@PostMapping("/facebook")
 	public String postFacebookLogin(@RequestParam String refreshToken) {
 		return "login facebook in progress";
 	}
 
+	@Operation(
+		summary = "Login with our app",
+		responses = {
+			@ApiResponse(responseCode= "200", description = "Success register"),
+			@ApiResponse(responseCode= "400", description = "Failure register"),
+		}
+	)
 	@PostMapping("/twitter")
 	public String postTwitterLogin(@RequestParam String refreshToken) {
 		return "login twitter in progress";

@@ -6,6 +6,7 @@ Users table:
     account_type [natif/google/facebook/twitter]
 
 
+Imports swagger : https://docs.swagger.io/swagger-core/v2.0.9/apidocs/index.html?io/swagger/v3/oas/annotations/media/Schema.html
 
 REGISTER
 * token jwt
@@ -19,10 +20,6 @@ API:
     twitter
 
     --> token
-
-
-
-
 
 
 REGISTER:
