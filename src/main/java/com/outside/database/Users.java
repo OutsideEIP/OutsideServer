@@ -2,7 +2,7 @@ package com.outside.database;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "Users", schema = "outside")
 public class Users {
 
 	@Id
@@ -15,7 +15,7 @@ public class Users {
     @Column(name = "token")
 	private String token;
 
-    @Column(name = "accountType")
+    @Column(name = "account_type")
 	private String accountType;
 
     public Users() {

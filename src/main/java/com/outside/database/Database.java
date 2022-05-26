@@ -9,28 +9,32 @@ import java.util.ArrayList;
 public class Database {
 
     @Autowired
-	DatabaseRepository databaseRepository;
+    DatabaseRepository databaseRepository;
 
-	public List<Users> getUser(String email) {
-		try {
-			List<Users> users = new ArrayList<Users>();
+    public List<Users> getUser(String email) {
+        try {
+            List<Users> users = new ArrayList<Users>();
 
-			databaseRepository.findByEmail(email).forEach(users::add);
-			return users;
-		} catch (Exception e) {
+            databaseRepository.findByEmail(email).forEach(users::add);
+            return users;
+        } catch (Exception e) {
             return null;
-		}
-	}
+        }
+    }
 
-	// public Connection Connect() {
-    //     String url = "jdbc:postgresql://localhost:5432/outside?user=postgres&password=password";
+    public void insertUser(Users user) {
+        databaseRepository.save(new Users(user.getEmail(), user.getToken(), user.getAccountType()));
+    }
 
-    //     try {
-    //         return DriverManager.getConnection(url);
-    //     } catch (SQLException e) {
-    //         return null;
-    //     }
-	// }
+    // public Connection Connect() {
+    // String url =
+    // "jdbc:postgresql://localhost:5432/outside?user=postgres&password=password";
 
+    // try {
+    // return DriverManager.getConnection(url);
+    // } catch (SQLException e) {
+    // return null;
+    // }
+    // }
 
 }

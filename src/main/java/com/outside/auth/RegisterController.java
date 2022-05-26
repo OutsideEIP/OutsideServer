@@ -1,0 +1,80 @@
+package com.outside.auth;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import java.util.Map;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@OpenAPIDefinition(info = @Info(title = "Outside swagger", version = "1.0", description = "Swagger Information"))
+@RequestMapping("/auth/register")
+@RestController
+public class RegisterController {
+
+    @Autowired
+    private RegisterService registerService = new RegisterService();
+
+    @Operation(summary = "Get register", responses = {
+            @ApiResponse(responseCode = "200", description = "description", content = @Content(schema = @Schema(example = "{\"foo\": \"bar\",\"baz\": true}")))
+    })
+    @GetMapping
+    public String getRegister() {
+        return "Register routes";
+    }
+
+    @Operation(summary = "Register with our app", responses = {
+            @ApiResponse(responseCode = "200", description = "Success register"),
+            @ApiResponse(responseCode = "400", description = "Failure register"),
+    })
+    @PostMapping("/natif")
+    public String postNatifRegister(@RequestParam String email, @RequestParam String password,
+            @RequestParam String confirmPassword) {
+        Map<String, Object> rslt = registerService.registerNatif(email, password, confirmPassword);
+
+        return (String) ((boolean) rslt.get("success") ? email /* should be token of jwt */ : rslt.get("errorMsg"));
+    }
+
+    @Operation(summary = "Register with google", responses = {
+            @ApiResponse(responseCode = "200", description = "Success register"),
+            @ApiResponse(responseCode = "400", description = "Failure register"),
+    })
+    @PostMapping("/google")
+    public String postGoogleRegister(@RequestParam String refreshToken) {
+        return "Register google in progress";
+    }
+
+    @Operation(summary = "Register with facebook", responses = {
+            @ApiResponse(responseCode = "200", description = "Success register"),
+            @ApiResponse(responseCode = "400", description = "Failure register"),
+    })
+    @PostMapping("/facebook")
+    public String postFacebookRegister(@RequestParam String refreshToken) {
+        return "Register facebook in progress";
+    }
+
+    @Operation(summary = "Register with twitter", responses = {
+            @ApiResponse(responseCode = "200", description = "Success register"),
+            @ApiResponse(responseCode = "400", description = "Failure register"),
+    })
+	@PostMapping("/twitter")
+	ResponseEntity<String> postTwitterRegister(@RequestParam String refreshToken) {
+		if (refreshToken.length() != 32) {
+			return ResponseEntity.status(400).body("The size of the refresh token is not correct");
+		}
+		return ResponseEntity.status(200).body("You are successfully registered");
+	}
+
+}
