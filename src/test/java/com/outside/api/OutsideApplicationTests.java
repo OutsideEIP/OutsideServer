@@ -27,6 +27,22 @@ public class OutsideApplicationTests {
 				.andExpect(content().string(equalTo("Hello!")));
 	}
 
+	@Test
+	public void postRequestTwitterFailed() throws Exception {
+		String refreshToken = "test";
+		mvc.perform(MockMvcRequestBuilders.post("/auth/register/twitter").accept(MediaType.APPLICATION_JSON).param("refreshToken", refreshToken))
+				.andExpect(status().is(400))
+				.andExpect(content().string(equalTo("The size of the refresh token is not correct")));
+	}
+
+	@Test
+	public void postRequestTwitterSuccess() throws Exception {
+		String refreshToken = "12345678901234567890123456789012";
+		mvc.perform(MockMvcRequestBuilders.post("/auth/register/twitter").accept(MediaType.APPLICATION_JSON).param("refreshToken", refreshToken))
+				.andExpect(status().is(200))
+				.andExpect(content().string(equalTo("You are successfully registered")));
+	}
+
 	// @Test
 	// public void postLogin() throws Exception {
 	// 	mvc.perform(MockMvcRequestBuilders.post("/auth/login").accept(MediaType.APPLICATION_JSON))

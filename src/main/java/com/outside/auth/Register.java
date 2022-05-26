@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -80,8 +81,11 @@ public class Register {
 		@ApiResponse(responseCode= "400", description = "Failure register"),
 	})
 	@PostMapping("/twitter")
-	public String postTwitterRegister(@RequestParam String refreshToken) {
-		return "Register twitter in progress :" + refreshToken;
+	ResponseEntity<String> postTwitterRegister(@RequestParam String refreshToken) {
+		if (refreshToken.length() != 32) {
+			return ResponseEntity.status(400).body("The size of the refresh token is not correct");
+		}
+		return ResponseEntity.status(200).body("You are successfully registered");
 	}
 
 }
