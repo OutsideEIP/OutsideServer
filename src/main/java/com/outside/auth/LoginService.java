@@ -16,7 +16,7 @@ class LoginService {
     protected Map<String, Object> loginNatif(String email, String password) {
         List<Users> users = database.getUser(email);
 
-        if (users == null || users.size() != 1)
+        if (users == null || users.isEmpty())
             return Map.of(
                     "success", false,
                     "errorMsg", "User not found");

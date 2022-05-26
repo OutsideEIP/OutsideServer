@@ -2,7 +2,7 @@ package com.outside.database;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Users", schema = "outside")
+@Table(name = "Users")
 public class Users {
 
 	@Id

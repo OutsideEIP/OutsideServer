@@ -5,7 +5,6 @@ CREATE DATABASE "outside";
 DROP TABLE IF EXISTS "Users";
 CREATE TABLE "Users"
 (
-    id           serial,
     email        varchar(20) not null
         constraint users_pk
             primary key,

@@ -23,6 +23,7 @@ class RegisterService {
         }
 
         users = database.getUser(email);
+        System.out.println(users);
         if (users != null && users.size() > 0)
             return Map.of(
                     "success", false,

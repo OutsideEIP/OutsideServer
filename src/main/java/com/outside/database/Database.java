@@ -13,9 +13,8 @@ public class Database {
 
     public List<Users> getUser(String email) {
         try {
-            List<Users> users = new ArrayList<Users>();
+            List<Users> users = databaseRepository.findByEmail(email);
 
-            databaseRepository.findByEmail(email).forEach(users::add);
             return users;
         } catch (Exception e) {
             return null;
@@ -23,7 +22,11 @@ public class Database {
     }
 
     public void insertUser(Users user) {
-        databaseRepository.save(new Users(user.getEmail(), user.getToken(), user.getAccountType()));
+        try {
+            databaseRepository.save(new Users(user.getEmail(), user.getToken(), user.getAccountType()));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     // public Connection Connect() {
