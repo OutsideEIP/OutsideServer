@@ -1,18 +1,10 @@
 package com.outside.auth;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.context.annotation.Import;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.List;
 
 
@@ -20,10 +12,7 @@ import com.outside.database.Database;
 import com.outside.database.Users;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 
 @RequestMapping("/auth/login")
@@ -34,10 +23,10 @@ public class Login {
 	Database database;
 
 	@Operation(
-		summary = "Register with our app",
+		summary = "Login with our app",
 		responses = {
-			@ApiResponse(responseCode= "200", description = "Success register"),
-			@ApiResponse(responseCode= "400", description = "Failure register"),
+			@ApiResponse(responseCode= "200", description = "Success login"),
+			@ApiResponse(responseCode= "400", description = "Failure login"),
 		}
 	)
 	@PostMapping("/natif")
@@ -63,10 +52,10 @@ public class Login {
 	}
 
 	@Operation(
-		summary = "Login with our app",
+		summary = "Login with googleh",
 		responses = {
-			@ApiResponse(responseCode= "200", description = "Success register"),
-			@ApiResponse(responseCode= "400", description = "Failure register"),
+			@ApiResponse(responseCode= "200", description = "Success login"),
+			@ApiResponse(responseCode= "400", description = "Failure login"),
 		}
 	)
 	@PostMapping("/google")
@@ -75,10 +64,10 @@ public class Login {
 	}
 
 	@Operation(
-		summary = "Login with our app",
+		summary = "Login with facebook",
 		responses = {
-			@ApiResponse(responseCode= "200", description = "Success register"),
-			@ApiResponse(responseCode= "400", description = "Failure register"),
+			@ApiResponse(responseCode= "200", description = "Success login"),
+			@ApiResponse(responseCode= "400", description = "Failure login"),
 		}
 	)
 	@PostMapping("/facebook")
@@ -87,10 +76,10 @@ public class Login {
 	}
 
 	@Operation(
-		summary = "Login with our app",
+		summary = "Login with twitter",
 		responses = {
-			@ApiResponse(responseCode= "200", description = "Success register"),
-			@ApiResponse(responseCode= "400", description = "Failure register"),
+			@ApiResponse(responseCode= "200", description = "Success login"),
+			@ApiResponse(responseCode= "400", description = "Failure login"),
 		}
 	)
 	@PostMapping("/twitter")
