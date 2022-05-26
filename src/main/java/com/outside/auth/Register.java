@@ -26,24 +26,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @RestController
 public class Register {
 
-	@Operation(
-		summary = "Get register",
-		responses = {
-			@ApiResponse(responseCode= "200", description = "description", content = @Content(schema = @Schema(example = "{\"foo\": \"bar\",\"baz\": true}")))
-		}
-	)
-	@GetMapping
-	public String getRegister() {
-		return "Register routes";
+	public String register() {
+		return "register";
 	}
 
-	@Operation(
-		summary = "Register with our app",
-		responses = {
-			@ApiResponse(responseCode= "200", description = "Success register"),
-			@ApiResponse(responseCode= "400", description = "Failure register"),
-		}
-	)
+	@Operation(summary = "Get register", responses = {
+		@ApiResponse(responseCode= "200", description = "description", content = @Content(schema = @Schema(example = "{\"foo\": \"bar\",\"baz\": true}")))
+	})
+	@GetMapping
+	public String getRegister() {
+		String name = register();
+		return "Register routes " + name + "\n";
+	}
+
+	@Operation(summary = "Register with our app",responses = {
+		@ApiResponse(responseCode= "200", description = "Success register"),
+		@ApiResponse(responseCode= "400", description = "Failure register")
+	})
 	@PostMapping("/natif")
 	public String postNatifRegister(@RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String accountType) {
 
@@ -81,16 +80,13 @@ public class Register {
 		return "Register facebook in progress";
 	}
 
-	@Operation(
-		summary = "Register with twitter",
-		responses = {
-			@ApiResponse(responseCode= "200", description = "Success register"),
-			@ApiResponse(responseCode= "400", description = "Failure register"),
-		}
-	)
+	@Operation(summary = "Register with twitter", responses = {
+		@ApiResponse(responseCode= "200", description = "Success register"),
+		@ApiResponse(responseCode= "400", description = "Failure register"),
+	})
 	@PostMapping("/twitter")
 	public String postTwitterRegister(@RequestParam String refreshToken) {
-		return "Register twitter in progress";
+		return "Register twitter in progress :" + refreshToken;
 	}
 
 }

@@ -1,12 +1,15 @@
+Imports swagger : https://docs.swagger.io/swagger-core/v2.0.9/apidocs/index.html?io/swagger/v3/oas/annotations/media/Schema.html
+
+Start database : sudo docker-compose up -d database
+Start java : ./gradlew bootRun
+
+
 SHEMA:
 Users table:
     id
     email
     password / refresh token 
     account_type [natif/google/facebook/twitter]
-
-
-Imports swagger : https://docs.swagger.io/swagger-core/v2.0.9/apidocs/index.html?io/swagger/v3/oas/annotations/media/Schema.html
 
 REGISTER
 * token jwt
