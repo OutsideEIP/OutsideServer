@@ -27,7 +27,7 @@ public class LoginController {
     public String postNatifLogin(@RequestParam String email, @RequestParam String password) {
         Map<String, Object> rslt = loginService.loginNatif(email, password);
 
-        return (String)((boolean)rslt.get("success") ? ((Users)rslt.get("success")).getEmail(): rslt.get("errorMsg"));
+        return (String)((boolean)rslt.get("success") ? ((Users)rslt.get("user")).getEmail(): rslt.get("errorMsg"));
     }
 
     @Operation(summary = "Login with google", responses = {
