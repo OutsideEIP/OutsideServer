@@ -39,7 +39,7 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         if (newVersion != null) {
-            throw new RuntimeException("Database was not up to date, a script has been generated for migration to v" + newVersion);
+            throw new DatabaseMigrationException(newVersion);
         }
 
         MigrationConfig config = new MigrationConfig();
