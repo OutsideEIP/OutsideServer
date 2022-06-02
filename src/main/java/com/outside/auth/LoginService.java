@@ -20,7 +20,11 @@ class LoginService {
             return Map.of(
                     "success", false,
                     "errorMsg", "User not found");
-
+        if (users.get(0).getToken().equals(password) == false) {
+            return Map.of(
+                    "success", false,
+                    "errorMsg", "Password incorrect");
+        }
         return Map.of(
                 "success", true,
                 "user", users.get(0));
