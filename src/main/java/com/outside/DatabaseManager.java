@@ -9,6 +9,7 @@ import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationRunner;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public class DatabaseManager {
@@ -45,6 +46,15 @@ public class DatabaseManager {
             newVersion = dbMigration.generateMigration();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        List<String> pendingDrops = dbMigration.getPendingDrops();
+        if (pendingDrops.size() > 0) {
+            System.setProperty("ddl.migration.pendingDropsFor", pendingDrops.get(0));
+            try {
+                newVersion = dbMigration.generateMigration();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         if (newVersion != null) {
             throw new DatabaseMigrationException(newVersion);
