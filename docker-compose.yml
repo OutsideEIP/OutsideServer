@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+      args:
+        OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS: ${OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS}
     ports:
       - "8080:8080"
     image: outside-server-image

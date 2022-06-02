@@ -9,6 +9,7 @@ import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationRunner;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class DatabaseManager {
 
@@ -29,6 +30,13 @@ public class DatabaseManager {
     }
 
     public void verifyState() {
+        Map<String, String> env = System.getenv();
+        boolean ignoreErr = env.get("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS").equalsIgnoreCase("true");
+
+        if (ignoreErr) {
+            return;
+        }
+
         DbMigration dbMigration = DbMigration.create();
         dbMigration.setPlatform(Platform.POSTGRES);
 
