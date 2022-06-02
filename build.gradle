@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'io.ebean' version '13.6.0'
 }
 
 group = 'com.outside'
@@ -12,7 +13,14 @@ repositories {
 	mavenCentral()
 }
 
+compileJava {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+}
+
 dependencies {
+	implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+	implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -22,6 +30,16 @@ dependencies {
 	implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.7'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'io.ebean:ebean:13.6.0'
+	implementation 'io.ebean:ebean-querybean:13.6.0'
+	implementation 'io.ebean:ebean-migration:13.6.0'
+	implementation 'io.ebean:ebean-ddl-generator:13.6.0'
+	annotationProcessor 'io.ebean:querybean-generator:13.6.0'
+	testImplementation 'io.ebean:ebean-test:13.6.0'
+}
+
+ebean {
+    debugLevel = 0 //0 - 9
 }
 
 tasks.named('test') {
