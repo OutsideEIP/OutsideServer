@@ -37,7 +37,7 @@ public class OutsideApplicationTests {
 
 	@Test
 	public void postRequestTwitterSuccess() throws Exception {
-		String refreshToken = "12345678901234567890123456789012";
+		String refreshToken = "12345678901234567890123456789013";
 		mvc.perform(MockMvcRequestBuilders.post("/auth/register/twitter").accept(MediaType.APPLICATION_JSON).param("refreshToken", refreshToken))
 				.andExpect(status().is(200))
 				.andExpect(content().string(equalTo("You are successfully registered")));
