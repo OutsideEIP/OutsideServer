@@ -18,6 +18,28 @@ public class DatabaseManager {
     String password;
     String url;
 
+    public void verifyState() {
+        Map<String, String> env = System.getenv();
+        boolean ignoreErr = env.containsKey("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS") && env.get("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS").equalsIgnoreCase("true");
+
+        if (ignoreErr) {
+            return;
+        }
+
+        DbMigration dbMigration = DbMigration.create();
+        dbMigration.setPlatform(Platform.POSTGRES);
+
+        String newVersion = this.generateUpdates(dbMigration);
+        newVersion = this.generateDrops(dbMigration, newVersion);
+
+        if (newVersion != null) {
+            throw new DatabaseMigrationException(newVersion);
+        } else {
+            this.runMigration();
+        }
+        this.refreshConnection();
+    }
+
     public void refreshConnection() {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setUsername(this.username);
@@ -30,36 +52,29 @@ public class DatabaseManager {
         DatabaseFactory.create(config2);
     }
 
-    public void verifyState() {
-        Map<String, String> env = System.getenv();
-        boolean ignoreErr = env.containsKey("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS") && env.get("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS").equalsIgnoreCase("true");
-
-        if (ignoreErr) {
-            return;
-        }
-
-        DbMigration dbMigration = DbMigration.create();
-        dbMigration.setPlatform(Platform.POSTGRES);
-
-        String newVersion = null;
-        try {
-            newVersion = dbMigration.generateMigration();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private String generateDrops(DbMigration dbMigration, String newVersion) {
         List<String> pendingDrops = dbMigration.getPendingDrops();
-        if (pendingDrops.size() > 0) {
+        if (!pendingDrops.isEmpty()) {
             System.setProperty("ddl.migration.pendingDropsFor", pendingDrops.get(0));
             try {
-                newVersion = dbMigration.generateMigration();
+                return dbMigration.generateMigration();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if (newVersion != null) {
-            throw new DatabaseMigrationException(newVersion);
-        }
+        return newVersion;
+    }
 
+    private String generateUpdates(DbMigration dbMigration) {
+        try {
+            return dbMigration.generateMigration();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void runMigration() {
         MigrationConfig config = new MigrationConfig();
         config.setDbUsername(this.username);
         config.setDbPassword(this.password);
@@ -68,8 +83,6 @@ public class DatabaseManager {
 
         MigrationRunner runner = new MigrationRunner(config);
         runner.run();
-
-        this.refreshConnection();
     }
 
     public void setUsername(String username) {
