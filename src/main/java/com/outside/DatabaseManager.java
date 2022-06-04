@@ -32,7 +32,7 @@ public class DatabaseManager {
 
     public void verifyState() {
         Map<String, String> env = System.getenv();
-        boolean ignoreErr = env.get("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS").equalsIgnoreCase("true");
+        boolean ignoreErr = env.containsKey("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS") && env.get("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS").equalsIgnoreCase("true");
 
         if (ignoreErr) {
             return;

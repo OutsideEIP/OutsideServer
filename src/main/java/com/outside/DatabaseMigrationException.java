@@ -10,7 +10,7 @@ public class DatabaseMigrationException extends RuntimeException {
 
     public DatabaseMigrationException(String newVersion) {
         Map<String, String> env = System.getenv();
-        boolean ignoreErr = env.get("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS").equalsIgnoreCase("true");
+        boolean ignoreErr = env.containsKey("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS") && env.get("OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS").equalsIgnoreCase("true");
 
         LOGGER.log(Level.INFO, "----------------------------------------------------------------------------------------------------");
         LOGGER.log(Level.INFO, "Database was not up to date, a script has been generated for migration to v" + newVersion);
