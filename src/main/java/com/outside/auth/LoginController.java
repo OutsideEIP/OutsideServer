@@ -35,7 +35,8 @@ public class LoginController {
             @ApiResponse(responseCode = "400", description = "Failure login"),
     })
     @PostMapping("/google")
-    public String postGoogleLogin(@RequestParam String refreshToken) {
+    public String postGoogleLogin(@RequestParam String authorizatioCcode) {
+        loginService.loginGoogle(authorizatioCcode);
         return "login google in progress";
     }
 
@@ -44,7 +45,8 @@ public class LoginController {
             @ApiResponse(responseCode = "400", description = "Failure login"),
     })
     @PostMapping("/facebook")
-    public String postFacebookLogin(@RequestParam String refreshToken) {
+    public String postFacebookLogin(@RequestParam String authorizatioCcode) {
+        loginService.loginFacebook(authorizatioCcode);
         return "login facebook in progress";
     }
 
@@ -53,7 +55,7 @@ public class LoginController {
             @ApiResponse(responseCode = "400", description = "Failure login"),
     })
     @PostMapping("/twitter")
-    public String postTwitterLogin(@RequestParam String refreshToken) {
+    public String postTwitterLogin(@RequestParam String authorizatioCcode) {
         return "login twitter in progress";
     }
 

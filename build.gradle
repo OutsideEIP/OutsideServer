@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     compileOnly("org.springframework.boot:spring-boot-devtools")
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -26,6 +27,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
 	// implementation group: 'org.springdoc', name: 'springdoc-openapi-webmvc-core', version: '1.6.8'
+    implementation 'io.github.cdimascio:java-dotenv:5.2.2'
+
+	implementation group: 'io.github.cdimascio', name: 'java-dotenv', version: '5.2.2'
 }
 
 tasks.named('test') {
