@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+
+  traefik:
+    image: traefik:v2.7
+    container_name: traefik
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      # DOCKER SOCKET
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      # CONFIGURATION FILES
+      - $PWD/config/traefik.yml:/etc/traefik/traefik.yml:ro
+      - $PWD/config/traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml:ro
+
+      # LOGS
+      - $PWD/log/traefik_log.log:/var/log/traefik_log.log:rw
+      - $PWD/log/traefik_access_log.log:/var/log/traefik_access_log.log:rw
+
+      # MIDDLEWARES
+      - $PWD/config/usersFile:/etc/traefik/usersFile:ro
+    environment:
+      - TRAEFIK_DASHBOARD_DNS=${TRAEFIK_DASHBOARD_DNS}
+    networks:
+      - outside
+
+networks:
+  outside:
+    external: true

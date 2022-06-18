@@ -1,0 +1,13 @@
+# certs/
+certs/**
+
+# log
+log/**
+
+# all
+
+usersFile
+
+# exception
+!.gitkeep
+!*.sh

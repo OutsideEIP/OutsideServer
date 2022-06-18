@@ -1,0 +1,42 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+# By default only ERROR are notified
+log:
+  filePath: /var/log/traefik_log.log
+
+accessLog:
+  filePath: /var/log/traefik_access_log.log
+
+# Enable dashboard
+api:
+  dashboard: true
+
+# Configure entry points
+entryPoints:
+  # 80
+  web:
+    address: :80
+    # http:
+    #   redirections:
+    #     entryPoint:
+    #       to: websecure
+    #       scheme: https
+    #       permanent: true
+
+  # 443
+  websecure:
+    address: :443
+
+# Configure providers
+providers:
+  docker:
+    watch: true
+    network: outside
+  file:
+    watch: true
+    filename: /etc/traefik/traefik_dynamic.yml
+
+
+

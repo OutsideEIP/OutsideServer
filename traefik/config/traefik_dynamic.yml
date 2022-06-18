@@ -1,0 +1,15 @@
+http:
+  routers:
+    # DASHBOARD
+    api:
+      entryPoints: web
+      middlewares:
+        - admin
+      service: api@internal
+      rule: Host(`{{ env "TRAEFIK_DASHBOARD_DNS" }}`)
+
+  # Middlewares
+  middlewares:
+    admin:
+      basicAuth:
+        usersFile: /etc/traefik/usersFile
