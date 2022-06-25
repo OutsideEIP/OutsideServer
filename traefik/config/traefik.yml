@@ -33,7 +33,7 @@ entryPoints:
 providers:
   docker:
     watch: true
-    network: outside
+    network: proxy
   file:
     watch: true
     filename: /etc/traefik/traefik_dynamic.yml

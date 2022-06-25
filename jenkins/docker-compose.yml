@@ -35,7 +35,7 @@ services:
     extra_hosts:
       - "localhost:host-gateway"
     networks:
-      - outside
+      - proxy
     labels:
       - traefik.http.routers.jenkins.rule=Host(`${JENKINS_DNS}`)
     restart: always
@@ -60,5 +60,5 @@ services:
     restart: always
 
 networks:
-  outside:
+  proxy:
     external: true

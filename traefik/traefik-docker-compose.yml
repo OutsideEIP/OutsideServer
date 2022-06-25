@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.3"
 services:
 
   traefik:
@@ -12,20 +12,20 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
       # CONFIGURATION FILES
-      - $PWD/config/traefik.yml:/etc/traefik/traefik.yml:ro
-      - $PWD/config/traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml:ro
+      - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./config/traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml:ro
 
       # LOGS
-      - $PWD/log/traefik_log.log:/var/log/traefik_log.log:rw
-      - $PWD/log/traefik_access_log.log:/var/log/traefik_access_log.log:rw
+      - ./log/traefik_log.log:/var/log/traefik_log.log:rw
+      - ./log/traefik_access_log.log:/var/log/traefik_access_log.log:rw
 
       # MIDDLEWARES
-      - $PWD/config/usersFile:/etc/traefik/usersFile:ro
+      - ./config/usersFile:/etc/traefik/usersFile:ro
     environment:
       - TRAEFIK_DASHBOARD_DNS=${TRAEFIK_DASHBOARD_DNS}
     networks:
-      - outside
+      - proxy
 
 networks:
-  outside:
+  proxy:
     external: true

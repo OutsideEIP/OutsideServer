@@ -7,6 +7,8 @@ log/**
 # all
 
 usersFile
+*.prod
+*.dev
 
 # exception
 !.gitkeep

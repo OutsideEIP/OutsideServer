@@ -1,3 +1,5 @@
 keys/jenkins-agent-key
 keys/jenkins-agent-key.pub
 .env
+*.prod
+*.dev
