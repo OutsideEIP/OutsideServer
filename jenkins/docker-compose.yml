@@ -44,7 +44,7 @@ services:
     container_name: static-agent-container
     build:
       context: .
-      dockerfile: ./Dockerfile_JenkinsAgent
+      dockerfile: ./${JENKINS_STATIC_AGENT_DOCKERFILE}
       args:
         SSH_AGENT_PUBLIC_KEY_FILE: ${SSH_AGENT_PUBLIC_KEY_FILE}
         HOST_DOCKER_GUID: ${HOST_DOCKER_GUID}
