@@ -9,3 +9,16 @@ GOOGLE_CLIENT_SECRET=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
 GOOGLE_REDIRECT_URI=http://localhost:8080/oauth2/callback/google
 
 https://accounts.google.com/o/oauth2/v2/auth?scope=https://mail.google.com&%20access_type=offline&redirect_uri=http://localhost:8080/oauth2/callback/google&response_type=code&client_id=304284542445-e3c085q8pjs72kqt2u2vbj9m9nl21ame.apps.googleusercontent.com
+
+{
+  "access_token": "ya29.A0ARrdaM-dev0eu9bh21V5e3AjussUC8FLDTnN9a_JV81BZIB5SSa_bP34vSukvmzRAWesVYkHT-cEOMZkNz4yMIhlpsJcmRlXIzpmaVy06mXYie38z25j6HKDPfUxtuM4MUHqVRARyoEEaLns5L07DQp5E_RjYUNnWUtBVEFTQVRBU0ZRRl91NjFWSWxSWFNzRU5NUVozTk1RRE1nQW91Zw0163",
+  "expires_in": 3599,
+  "scope": "https://mail.google.com/",
+  "token_type": "Bearer"
+}
+
+
+
+https://www.facebook.com/v8.0/dialog/oauth?client_id=581057330404024&redirect_uri=http://localhost:8080/oauth2/callback/google
+
+http://localhost:8080/oauth2/callback/google?code=AQAZdLh7pLnTtJOecGJQKp0pAV2Q9meu83saDyE3UNTEri_8u4ddXihG7E54LlOzZBPZ8s446eTZqqRmP20iTs7ZsD5gdfmKQL3rugL0QWtitLMsblnsnTYKe9tkWPvUxwHwMRDutniKOLYcL1HSf3tVwvg8k6Pq6nUxu4LKS7QTS5ngrda_kXOKNev_-j-Y1BLNHsWkS3qvUnFO_H3hssOgOlpqmF4qcr6dI41NFbU3JZlvDEw-W3N-WHR2wDpIi6xOyMQ-A6Xn6iIw56O3uVCBeYjANeArL8kttQp6wxhKe_HaRNZ61he37AkWVSa7f2Xj9RH-rZXq9_LuHi2csqcWTTiuVLzOcRdoSrSzxw7u0u-aM_2YiMWq6KNaKksTM41ER5eaOsPelWfxyW0zxeY-pQMKwFxG8RLZEalk6YucLg#_=_

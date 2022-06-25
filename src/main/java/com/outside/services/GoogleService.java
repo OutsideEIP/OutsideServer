@@ -1,4 +1,4 @@
-package com.outside.auth;
+package com.outside.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,44 +18,46 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
+
+import com.google.gson.Gson;
 import com.outside.database.Database;
-import com.outside.services.GoogleService;
 import com.outside.database.Users;
 
 @Component
-class LoginService {
-    @Autowired
-    private Database database;
-    @Autowired
-    private GoogleService googleService;
+public class GoogleService {
 
     private Dotenv dotenv = Dotenv.load();
 
-    protected Map<String, Object> loginNatif(String email, String password) {
-        List<Users> users = database.getUser(email);
+    public String getAccessToken(String authorizatioCode) {
 
-        if (users == null || users.isEmpty())
-            return Map.of(
-                    "success", false,
-                    "errorMsg", "User not found");
-        if (users.get(0).getToken().equals(password) == false) {
-            return Map.of(
-                    "success", false,
-                    "errorMsg", "Password incorrect");
+        String url = "https://oauth2.googleapis.com/token";
+        RestTemplate restTemplate = new RestTemplate();
+        String uri = new String();
+        HttpHeaders headers = new HttpHeaders();
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                .queryParam("code", authorizatioCode)
+                .queryParam("client_id", dotenv.get("GOOGLE_CLIENT_ID"))
+                .queryParam("client_secret", new String(dotenv.get("GOOGLE_CLIENT_SECRET")))
+                .queryParam("grant_type", "authorization_code")
+                .queryParam("redirect_uri", dotenv.get("GOOGLE_REDIRECT_URI"));
+        try {
+            uri = URLDecoder.decode(builder.toUriString(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
         }
-        return Map.of(
-                "success", true,
-                "user", users.get(0));
-    }
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        HttpEntity<String> response = restTemplate.exchange(
+                uri,
+                HttpMethod.POST,
+                entity,
+                String.class);
 
-    protected Map<String, Object> loginGoogle(String authorizatioCode) {
-        String accessToken = googleService.getAccessToken(authorizatioCode);
+        Map<String, String> map = new Gson().fromJson(response.getBody(), new TypeToken<Map<String, String>>() {
+        }.getType());
 
-        System.out.println(accessToken);
-
-        return Map.of(
-                "success", true,
-                "user", "theo");
+        return map.get("access_token");
     }
 
     protected Map<String, Object> loginFacebook(String authorizatioCode) {

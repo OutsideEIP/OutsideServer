@@ -1,4 +1,4 @@
-package com.outside.auth;
+package com.outside.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,45 +18,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
+
+import com.google.gson.Gson;
 import com.outside.database.Database;
-import com.outside.services.GoogleService;
 import com.outside.database.Users;
 
 @Component
-class LoginService {
-    @Autowired
-    private Database database;
-    @Autowired
-    private GoogleService googleService;
+public class FacebookService {
 
     private Dotenv dotenv = Dotenv.load();
-
-    protected Map<String, Object> loginNatif(String email, String password) {
-        List<Users> users = database.getUser(email);
-
-        if (users == null || users.isEmpty())
-            return Map.of(
-                    "success", false,
-                    "errorMsg", "User not found");
-        if (users.get(0).getToken().equals(password) == false) {
-            return Map.of(
-                    "success", false,
-                    "errorMsg", "Password incorrect");
-        }
-        return Map.of(
-                "success", true,
-                "user", users.get(0));
-    }
-
-    protected Map<String, Object> loginGoogle(String authorizatioCode) {
-        String accessToken = googleService.getAccessToken(authorizatioCode);
-
-        System.out.println(accessToken);
-
-        return Map.of(
-                "success", true,
-                "user", "theo");
-    }
 
     protected Map<String, Object> loginFacebook(String authorizatioCode) {
         String url = "https://graph.facebook.com/v14.0/oauth/access_token?";
@@ -80,6 +52,11 @@ class LoginService {
                 String.class);
 
         System.out.println(response.getBody());
+
+        Map<String, String> map = new Gson().fromJson(response.getBody(), new TypeToken<Map<String, String>>() {
+        }.getType());
+
+        System.out.println(map);
         return Map.of(
                 "success", true,
                 "user", "theo");
