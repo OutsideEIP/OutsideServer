@@ -2,6 +2,7 @@ package com.outside.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.http.HttpEntity;
@@ -18,8 +19,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.outside.database.Database;
 import com.outside.services.GoogleService;
+import com.outside.services.FacebookService;
 import com.outside.database.Users;
 
 @Component
@@ -28,6 +32,8 @@ class LoginService {
     private Database database;
     @Autowired
     private GoogleService googleService;
+    @Autowired
+    private FacebookService facebookService;
 
     private Dotenv dotenv = Dotenv.load();
 
@@ -49,39 +55,18 @@ class LoginService {
     }
 
     protected Map<String, Object> loginGoogle(String authorizatioCode) {
-        String accessToken = googleService.getAccessToken(authorizatioCode);
-
-        System.out.println(accessToken);
-
+        Map<String, Object> accessToken = googleService.getAccessToken(authorizatioCode);
+        boolean success = ((boolean) accessToken.get("success"));
         return Map.of(
-                "success", true,
-                "user", "theo");
+                "success", success,
+                success ? "data" : "errorMsg", success ? accessToken.get("data") : accessToken.get("errorMsg"));
     }
 
     protected Map<String, Object> loginFacebook(String authorizatioCode) {
-        String url = "https://graph.facebook.com/v14.0/oauth/access_token?";
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        // headers.add("Header", "header1");
-
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("code", authorizatioCode)
-                .queryParam("client_id", dotenv.get("FACEBOOK_CLIENT_ID"))
-                .queryParam("client_secret", dotenv.get("FACEBOOK_CLIENT_SECRET"))
-                .queryParam("redirect_uri", dotenv.get("FACEBOOK_REDIRECT_URI"));
-
-        HttpEntity<?> entity = new HttpEntity<>(headers);
-        HttpEntity<String> response = restTemplate.exchange(
-                builder.toUriString(),
-                HttpMethod.GET,
-                entity,
-                String.class);
-
-        System.out.println(response.getBody());
+        Map<String, Object> accessToken = facebookService.getAccessToken(authorizatioCode);
+        boolean success = ((boolean) accessToken.get("success"));
         return Map.of(
-                "success", true,
-                "user", "theo");
+                "success", success,
+                success ? "data" : "errorMsg", success ? accessToken.get("data") : accessToken.get("errorMsg"));
     }
 }

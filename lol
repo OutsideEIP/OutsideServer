@@ -19,6 +19,8 @@ https://accounts.google.com/o/oauth2/v2/auth?scope=https://mail.google.com&%20ac
 
 
 
-https://www.facebook.com/v8.0/dialog/oauth?client_id=581057330404024&redirect_uri=http://localhost:8080/oauth2/callback/google
+https://www.facebook.com/v8.0/dialog/oauth?client_id=581057330404024&redirect_uri=http://localhost:8080/oauth2/callback/facebook
 
-http://localhost:8080/oauth2/callback/google?code=AQAZdLh7pLnTtJOecGJQKp0pAV2Q9meu83saDyE3UNTEri_8u4ddXihG7E54LlOzZBPZ8s446eTZqqRmP20iTs7ZsD5gdfmKQL3rugL0QWtitLMsblnsnTYKe9tkWPvUxwHwMRDutniKOLYcL1HSf3tVwvg8k6Pq6nUxu4LKS7QTS5ngrda_kXOKNev_-j-Y1BLNHsWkS3qvUnFO_H3hssOgOlpqmF4qcr6dI41NFbU3JZlvDEw-W3N-WHR2wDpIi6xOyMQ-A6Xn6iIw56O3uVCBeYjANeArL8kttQp6wxhKe_HaRNZ61he37AkWVSa7f2Xj9RH-rZXq9_LuHi2csqcWTTiuVLzOcRdoSrSzxw7u0u-aM_2YiMWq6KNaKksTM41ER5eaOsPelWfxyW0zxeY-pQMKwFxG8RLZEalk6YucLg#_=_
+
+{"access_token":"EAAIQdZCPF2rgBACzqq6uMFBytYkOMWBnDgcbHGgzZCMDbE5BaqWZA0bJS1en51RZAowKtCbDtDx4DMed0b9xDPpiUicTIIyauK5YfFvy9nTsMy7A8oNx75ODgi7baeMQGonOnccNoC06phwaITSNZAYZAiXa5mzWnQqdFWGZBBhuisx5Oaiv7CIkGZCLHfZBJtzjrJTmvlHvLelH4pWdzxF1Kg95OUvegNeqPqgu8sWp4KEnQyXlkZBVhM","token_type":"bearer","expires_in":5179237}
+{"error":{"message":"This authorization code has been used.","type":"OAuthException","code":100,"error_subcode":36009,"fbtrace_id":"AMK_8ZPJ-cref5oWOqCJveT"}}

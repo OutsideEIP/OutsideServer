@@ -2,6 +2,7 @@ package com.outside.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.http.HttpEntity;
@@ -30,7 +31,7 @@ public class GoogleService {
 
     private Dotenv dotenv = Dotenv.load();
 
-    public String getAccessToken(String authorizatioCode) {
+    public Map<String, Object> getAccessToken(String authorizatioCode) {
 
         String url = "https://oauth2.googleapis.com/token";
         RestTemplate restTemplate = new RestTemplate();
@@ -48,42 +49,31 @@ public class GoogleService {
         }
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         HttpEntity<?> entity = new HttpEntity<>(headers);
-        HttpEntity<String> response = restTemplate.exchange(
-                uri,
-                HttpMethod.POST,
-                entity,
-                String.class);
 
-        Map<String, String> map = new Gson().fromJson(response.getBody(), new TypeToken<Map<String, String>>() {
-        }.getType());
+        try {
 
-        return map.get("access_token");
-    }
+            HttpEntity<String> response =  restTemplate.exchange(
+                    uri,
+                    HttpMethod.POST,
+                    entity,
+                    String.class);
 
-    protected Map<String, Object> loginFacebook(String authorizatioCode) {
-        String url = "https://graph.facebook.com/v14.0/oauth/access_token?";
-        RestTemplate restTemplate = new RestTemplate();
+            Map<String, String> map = new Gson().fromJson(response.getBody(), new TypeToken<Map<String, String>>() {
+            }.getType());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        // headers.add("Header", "header1");
+            return Map.of(
+                    "success", true,
+                    "data", map.get("access_token"));
+        } catch (RestClientException e) {
+            System.out.println(e.getMessage());
+            // Map<String, String> errorMap = new Gson().fromJson(e.getMessage().split(":
+            // ")[1], new TypeToken<Map<String, String>>() {
+            // }.getType());
+            // System.out.println(errorMap);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("code", authorizatioCode)
-                .queryParam("client_id", dotenv.get("FACEBOOK_CLIENT_ID"))
-                .queryParam("client_secret", dotenv.get("FACEBOOK_CLIENT_SECRET"))
-                .queryParam("redirect_uri", dotenv.get("FACEBOOK_REDIRECT_URI"));
-
-        HttpEntity<?> entity = new HttpEntity<>(headers);
-        HttpEntity<String> response = restTemplate.exchange(
-                builder.toUriString(),
-                HttpMethod.GET,
-                entity,
-                String.class);
-
-        System.out.println(response.getBody());
-        return Map.of(
-                "success", true,
-                "user", "theo");
+            return Map.of(
+                    "success", false,
+                    "errorMsg", "error");
+        }
     }
 }

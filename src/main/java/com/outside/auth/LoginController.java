@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import java.util.Map;
 
 import com.outside.database.Users;
@@ -24,10 +27,12 @@ public class LoginController {
             @ApiResponse(responseCode = "400", description = "Failure login"),
     })
     @PostMapping("/natif")
-    public String postNatifLogin(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<String> postNatifLogin(@RequestParam String email, @RequestParam String password) {
         Map<String, Object> rslt = loginService.loginNatif(email, password);
+        boolean success = (boolean) rslt.get("success");
 
-        return (String)((boolean)rslt.get("success") ? ((Users)rslt.get("user")).getEmail(): rslt.get("errorMsg"));
+        return new ResponseEntity<>((String) (success ? rslt.get("data") : rslt.get("errorMsg")),
+                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @Operation(summary = "Login with google", responses = {
@@ -35,9 +40,12 @@ public class LoginController {
             @ApiResponse(responseCode = "400", description = "Failure login"),
     })
     @PostMapping("/google")
-    public String postGoogleLogin(@RequestParam String authorizatioCcode) {
-        loginService.loginGoogle(authorizatioCcode);
-        return "login google in progress";
+    public ResponseEntity<String> postGoogleLogin(@RequestParam String authorizatioCcode) {
+        Map<String, Object> rslt = loginService.loginGoogle(authorizatioCcode);
+        boolean success = (boolean) rslt.get("success");
+
+        return new ResponseEntity<>((String) (success ? rslt.get("data") : rslt.get("errorMsg")),
+                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @Operation(summary = "Login with facebook", responses = {
@@ -45,18 +53,12 @@ public class LoginController {
             @ApiResponse(responseCode = "400", description = "Failure login"),
     })
     @PostMapping("/facebook")
-    public String postFacebookLogin(@RequestParam String authorizatioCcode) {
-        loginService.loginFacebook(authorizatioCcode);
-        return "login facebook in progress";
-    }
+    public ResponseEntity<String> postFacebookLogin(@RequestParam String authorizatioCcode) {
+        Map<String, Object> rslt = loginService.loginFacebook(authorizatioCcode);
+        boolean success = (boolean) rslt.get("success");
 
-    @Operation(summary = "Login with twitter", responses = {
-            @ApiResponse(responseCode = "200", description = "Success login"),
-            @ApiResponse(responseCode = "400", description = "Failure login"),
-    })
-    @PostMapping("/twitter")
-    public String postTwitterLogin(@RequestParam String authorizatioCcode) {
-        return "login twitter in progress";
+        return new ResponseEntity<>((String) (success ? rslt.get("data") : rslt.get("errorMsg")),
+                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
 }
