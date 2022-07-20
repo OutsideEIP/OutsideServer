@@ -12,70 +12,86 @@ import org.springframework.http.MediaType;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 import java.lang.reflect.Type;
 import com.google.gson.reflect.TypeToken;
-
+import com.nimbusds.jose.shaded.json.JSONObject;
+import com.nimbusds.jose.shaded.json.parser.JSONParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.outside.database.Database;
 import com.outside.database.Users;
+
+import aj.org.objectweb.asm.TypeReference;
 
 @Component
 public class FacebookService {
 
     private Dotenv dotenv = Dotenv.load();
 
+    public HttpRequest.BodyPublisher encode(HashMap<String, String> values) {
+        String form = values
+                .entrySet()
+                .stream()
+                .map(entry -> String.join("=",
+                        URLEncoder.encode(entry.getKey().toString(), StandardCharsets.UTF_8),
+                        URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8)))
+                .collect(Collectors.joining("&"));
+        return HttpRequest.BodyPublishers.ofString(form);
+    }
+
+    // @SuppressWarnings("unchecked")
     public Map<String, Object> getAccessToken(String authorizatioCode) {
         String url = "https://graph.facebook.com/v14.0/oauth/access_token?";
-        RestTemplate restTemplate = new RestTemplate();
+        HttpResponse<String> response = null;
+        HttpClient client = HttpClient.newHttpClient();
+        var values = new HashMap<String, String>() {
+            {
+                put("code", authorizatioCode);
+                put("client_id", dotenv.get("FACEBOOK_CLIENT_ID"));
+                put("client_secret", dotenv.get("FACEBOOK_CLIENT_SECRET"));
+                put("redirect_uri", dotenv.get("FACEBOOK_REDIRECT_URI"));
+            }
+        };
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        // headers.add("Header", "header1");
-
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("code", authorizatioCode)
-                .queryParam("client_id", dotenv.get("FACEBOOK_CLIENT_ID"))
-                .queryParam("client_secret", dotenv.get("FACEBOOK_CLIENT_SECRET"))
-                .queryParam("redirect_uri", dotenv.get("FACEBOOK_REDIRECT_URI"));
-        HttpEntity<?> entity = new HttpEntity<>(headers);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .headers("Content-Type", "application/x-www-form-urlencoded")
+                .POST(this.encode(values))
+                .build();
 
         try {
+            response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            HttpEntity<String> response = restTemplate.exchange(
-                    builder.toUriString(),
-                    HttpMethod.GET,
-                    entity,
-                    String.class);
-
-            Map<String, String> map = new Gson().fromJson(response.getBody(), new TypeToken<Map<String, String>>() {
-            }.getType());
-
-            return Map.of(
-                    "success", true,
-                    "data", map.get("access_token"));
-        } catch (RestClientException e) {
-            // Map<String, Object> errorMap = new Gson().fromJson(
-            //         e.getMessage().substring(e.getMessage().indexOf("\"",
-            //                 0)).replaceAll("^\"|\"$", ""),
-            //         new TypeToken<Map<String, Object>>() {
-            //         }.getType());
-
-            // Map<String, String> map = new
-            // Gson().fromJson(errorMap.get("error").toString(), new TypeToken<Map<String,
-            // String>>() {
-            // }.getType());
-            // System.out.println(map.get("message"));
-
+        System.out.println(response.body());
+        Map<String, Object> map = new Gson().fromJson(response.body(), new TypeToken<Map<String, Object>>() {
+        }.getType());
+        System.out.println(map);
+        if (map.get("error") != null) {
             return Map.of(
                     "success", false,
-                    "errorMsg", "error");
-        }
+                    "errorMsg", ((Map<String, Object>) map.get("error")).get("message"));
+        } else
+            return Map.of(
+                    "success", true,
+                    "errorMsg", map.get("accessToken"));
     }
 }
