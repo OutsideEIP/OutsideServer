@@ -12,13 +12,20 @@ import org.springframework.http.MediaType;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 import java.lang.reflect.Type;
 import com.google.gson.reflect.TypeToken;
 
@@ -31,49 +38,44 @@ public class GoogleService {
 
     private Dotenv dotenv = Dotenv.load();
 
+    public HttpRequest.BodyPublisher encode(Map<String, String> values) {
+        String form = values
+                .entrySet()
+                .stream()
+                .map(entry -> String.join("=",
+                        URLEncoder.encode(entry.getKey().toString(), StandardCharsets.UTF_8),
+                        URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8)))
+                .collect(Collectors.joining("&"));
+        return HttpRequest.BodyPublishers.ofString(form);
+    }
+
     public Map<String, Object> getAccessToken(String authorizatioCode) {
-
         String url = "https://oauth2.googleapis.com/token";
-        RestTemplate restTemplate = new RestTemplate();
-        String uri = new String();
-        HttpHeaders headers = new HttpHeaders();
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("code", authorizatioCode)
-                .queryParam("client_id", dotenv.get("GOOGLE_CLIENT_ID"))
-                .queryParam("client_secret", new String(dotenv.get("GOOGLE_CLIENT_SECRET")))
-                .queryParam("grant_type", "authorization_code")
-                .queryParam("redirect_uri", dotenv.get("GOOGLE_REDIRECT_URI"));
-        try {
-            uri = URLDecoder.decode(builder.toUriString(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-        }
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        HttpEntity<?> entity = new HttpEntity<>(headers);
+        HttpResponse<String> response = null;
+        HttpClient client = HttpClient.newHttpClient();
+        var values = Map.of("code", authorizatioCode,
+                "grant", "authorizatioCode",
+                "client_id", dotenv.get("GOOGLE_CLIENT_ID"),
+                "client_secret", dotenv.get("GOOGLE_CLIENT_SECRET"),
+                "redirect_uri", dotenv.get("GOOGLE_REDIRECT_URI"));
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .headers("Content-Type", "application/x-www-form-urlencoded")
+                .POST(this.encode(values))
+                .build();
 
         try {
-
-            HttpEntity<String> response =  restTemplate.exchange(
-                    uri,
-                    HttpMethod.POST,
-                    entity,
-                    String.class);
-
-            Map<String, String> map = new Gson().fromJson(response.getBody(), new TypeToken<Map<String, String>>() {
-            }.getType());
-
-            return Map.of(
-                    "success", true,
-                    "data", map.get("access_token"));
-        } catch (RestClientException e) {
-            System.out.println(e.getMessage());
-            // Map<String, String> errorMap = new Gson().fromJson(e.getMessage().split(":
-            // ")[1], new TypeToken<Map<String, String>>() {
-            // }.getType());
-            // System.out.println(errorMap);
-
-            return Map.of(
-                    "success", false,
-                    "errorMsg", "error");
+            response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
+
+        Map<String, Object> map = new Gson().fromJson(response.body(), new TypeToken<Map<String, Object>>() {
+        }.getType());
+
+        return map.get("error_description") != null ? Map.of("success", false, "errorMsg", map.get("error_description"))
+                : Map.of("success", false, "errorMsg", "error");
     }
 }

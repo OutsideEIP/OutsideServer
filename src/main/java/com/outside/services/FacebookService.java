@@ -43,7 +43,7 @@ public class FacebookService {
 
     private Dotenv dotenv = Dotenv.load();
 
-    public HttpRequest.BodyPublisher encode(HashMap<String, String> values) {
+    public HttpRequest.BodyPublisher encode(Map<String, String> values) {
         String form = values
                 .entrySet()
                 .stream()
@@ -59,14 +59,11 @@ public class FacebookService {
         String url = "https://graph.facebook.com/v14.0/oauth/access_token?";
         HttpResponse<String> response = null;
         HttpClient client = HttpClient.newHttpClient();
-        var values = new HashMap<String, String>() {
-            {
-                put("code", authorizatioCode);
-                put("client_id", dotenv.get("FACEBOOK_CLIENT_ID"));
-                put("client_secret", dotenv.get("FACEBOOK_CLIENT_SECRET"));
-                put("redirect_uri", dotenv.get("FACEBOOK_REDIRECT_URI"));
-            }
-        };
+        var values = Map.of(
+                "code", authorizatioCode,
+                "client_id", dotenv.get("FACEBOOK_CLIENT_ID"),
+                "client_secret", dotenv.get("FACEBOOK_CLIENT_SECRET"),
+                "redirect_uri", dotenv.get("FACEBOOK_REDIRECT_URI"));
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -92,6 +89,6 @@ public class FacebookService {
         } else
             return Map.of(
                     "success", true,
-                    "errorMsg", map.get("accessToken"));
+                    "data", map.get("accessToken"));
     }
 }
