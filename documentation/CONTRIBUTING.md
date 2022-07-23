@@ -44,7 +44,9 @@ https://user-images.githubusercontent.com/62943574/166144839-f615f491-b5bc-4751-
 
 ## Pull request
 
-- Name : `[DoDs number] [type] : DoDs name`,
+PR name must be written in english.
+
+- Name : `[DoDs number] [type] : DoDs name`, 
 - Assignees : Select people in charge of this,
 - Add description : Follow the template.
 - Add labels
@@ -66,6 +68,8 @@ https://user-images.githubusercontent.com/62943574/168418598-a3bea098-5eb0-46bf-
 :warning: **The issue description have to contains the same as the PLD document.**
 
 ## How to write a commit :
+
+Commit messages must be written in english.
 
 A modification of file have to be associated to a message that respect the format below :
 
