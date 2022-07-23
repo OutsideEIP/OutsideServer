@@ -1,0 +1,46 @@
+version: "3"
+services:
+
+  server:
+    container_name: outside-qa-server-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS: ${OUTSIDE_SERVER_IGNORE_DATABASE_ERRORS}
+    ports:
+      - "8083:8080"
+    image: outside-qa-server-image
+    restart: always
+    depends_on:
+      - qa-database
+    labels:
+      - traefik.http.routers.server.rule=Host(`${QA_SERVER_DNS}`)
+    networks:
+      - proxy
+      - qa-outside
+
+  qa-database:
+    container_name: outside-qa-database-container
+    ports:
+      - 8082:5432
+    image: postgres:14.4
+    extra_hosts:
+      - "localhost:host-gateway"
+    environment:
+      POSTGRES_DB: ${QA_POSTGRES_DB}
+      POSTGRES_USER: ${QA_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${QA_POSTGRES_PASSWORD}
+    volumes:
+      - ./data/postgres-qa-container-data:/var/lib/postgresql/data
+    labels:
+      - traefik.http.routers.db.rule=Host(`${QA_DB_DNS}`)
+    networks:
+      - proxy
+      - qa-outside
+
+networks:
+  proxy:
+    external: true
+  qa-outside:
+    driver: bridge

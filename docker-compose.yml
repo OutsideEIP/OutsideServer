@@ -30,6 +30,8 @@ services:
       - ./data/pgadmin-container-data:/var/lib/pgadmin:rw  # `sudo chown -R 5050:5050 data/pgadmin-container-data/` to save session
     depends_on:
       - database
+    networks:
+      - outside
 
   database:
     container_name: outside-database-container
@@ -39,6 +41,15 @@ services:
     extra_hosts:
       - "localhost:host-gateway"
     environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./data/postgres-container-data:/var/lib/postgresql/data
+    networks:
+      - outside
+
+
+networks:
+  outside:
+    driver: bridge
