@@ -2,11 +2,11 @@
 certs/**
 
 # log
-log/**
+log/*.log
 
 # all
 
-usersFile
+config/usersFile
 *.prod
 *.dev
 
