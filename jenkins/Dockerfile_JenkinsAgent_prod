@@ -1,0 +1,28 @@
+FROM jenkins/ssh-agent:latest
+
+
+ARG SSH_AGENT_PUBLIC_KEY_FILE \
+    HOST_DOCKER_GUID
+
+
+# Installing docker client and assigning execution rights to jenkins
+USER root
+
+RUN apt-get update -qq && apt-get install -qqy ca-certificates curl gnupg lsb-release
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+RUN echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN apt-get update -qq && apt-get install -qqy docker-ce docker-ce-cli containerd.io
+
+# ----------
+
+# Jenkins Agent configuration
+COPY ${SSH_AGENT_PUBLIC_KEY_FILE} /etc/.ssh/jenkins-agent-key.pub
+
+RUN env | egrep -v "^(HOME=|USER=|MAIL=|LC_ALL=|LS_COLORS=|LANG=|HOSTNAME=|PWD=|TERM=|SHLVL=|LANGUAGE=|_=)" >> /etc/environment
+RUN echo 'source /etc/environment 2>/dev/null' > /etc/profile.d/p.sh
+RUN echo "export JENKINS_AGENT_SSH_PUBKEY='`cat /etc/.ssh/jenkins-agent-key.pub`'" >> /entrypoint.sh && echo "exec setup-sshd" >> /entrypoint.sh && chmod +x /entrypoint.sh
+
+ENTRYPOINT [ "bash", "-c", "/entrypoint.sh" ]
+# ----------

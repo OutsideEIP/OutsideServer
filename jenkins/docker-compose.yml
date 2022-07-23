@@ -34,13 +34,17 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock'
     extra_hosts:
       - "localhost:host-gateway"
+    networks:
+      - proxy
+    labels:
+      - traefik.http.routers.jenkins.rule=Host(`${JENKINS_DNS}`)
     restart: always
 
   static-agent:
     container_name: static-agent-container
     build:
       context: .
-      dockerfile: ./Dockerfile_JenkinsAgent
+      dockerfile: ./${JENKINS_STATIC_AGENT_DOCKERFILE}
       args:
         SSH_AGENT_PUBLIC_KEY_FILE: ${SSH_AGENT_PUBLIC_KEY_FILE}
         HOST_DOCKER_GUID: ${HOST_DOCKER_GUID}
@@ -51,4 +55,10 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock'
     extra_hosts:
       - "localhost:host-gateway"
+    labels:
+      - traefik.enable=false
     restart: always
+
+networks:
+  proxy:
+    external: true

@@ -35,3 +35,13 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### Enironment ###
+*.prod
+*.dev
+
+
+### Log ###
+*.log
+
